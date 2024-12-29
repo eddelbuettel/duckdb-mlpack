@@ -11,6 +11,9 @@
 // OpenSSL linked through vcpkg
 #include <openssl/opensslv.h>
 
+// mlpack
+#include <mlpack.hpp>
+
 namespace duckdb {
 
 inline void MlpackScalarFun(DataChunk &args, ExpressionState &state, Vector &result) {
@@ -33,6 +36,16 @@ inline void MlpackOpenSSLVersionScalarFun(DataChunk &args, ExpressionState &stat
         });
 }
 
+inline void MlpackMlpackVersionScalarFun(DataChunk &args, ExpressionState &state, Vector &result) {
+    auto &name_vector = args.data[0];
+    UnaryExecutor::Execute<string_t, string_t>(
+	    name_vector, result, args.size(),
+	    [&](string_t name) {
+			return StringVector::AddString(result, "Mlpack " + name.GetString() + ", my included mlpack version is " + mlpack::util::GetVersion() );
+        });
+}
+
+
 static void LoadInternal(DatabaseInstance &instance) {
     // Register a scalar function
     auto mlpack_scalar_function = ScalarFunction("mlpack", {LogicalType::VARCHAR}, LogicalType::VARCHAR, MlpackScalarFun);
@@ -42,6 +55,12 @@ static void LoadInternal(DatabaseInstance &instance) {
     auto mlpack_openssl_version_scalar_function = ScalarFunction("mlpack_openssl_version", {LogicalType::VARCHAR},
                                                 LogicalType::VARCHAR, MlpackOpenSSLVersionScalarFun);
     ExtensionUtil::RegisterFunction(instance, mlpack_openssl_version_scalar_function);
+
+    // Register another scalar function
+    auto mlpack_mlpack_version_scalar_function = ScalarFunction("mlpack_mlpack_version", {LogicalType::VARCHAR},
+                                                LogicalType::VARCHAR, MlpackMlpackVersionScalarFun);
+    ExtensionUtil::RegisterFunction(instance, mlpack_mlpack_version_scalar_function);
+
 }
 
 void MlpackExtension::Load(DuckDB &db) {

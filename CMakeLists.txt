@@ -3,6 +3,10 @@ cmake_minimum_required(VERSION 3.5)
 # Set extension name here
 set(TARGET_NAME mlpack)
 
+# Set C++ standard (MLPack requires C++17 or later)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # Consider using ccache
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
@@ -13,6 +17,11 @@ endif()
 # used in cmake with find_package. Feel free to remove or replace with other dependencies.
 # Note that it should also be removed from vcpkg.json to prevent needlessly installing it..
 find_package(OpenSSL REQUIRED)
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
+
+# mlpack
+find_package(mlpack REQUIRED)
 
 set(EXTENSION_NAME ${TARGET_NAME}_extension)
 set(LOADABLE_EXTENSION_NAME ${TARGET_NAME}_loadable_extension)
@@ -28,6 +37,12 @@ build_loadable_extension(${TARGET_NAME} " " ${EXTENSION_SOURCES})
 # Link OpenSSL in both the static library as the loadable extension
 target_link_libraries(${EXTENSION_NAME} OpenSSL::SSL OpenSSL::Crypto)
 target_link_libraries(${LOADABLE_EXTENSION_NAME} OpenSSL::SSL OpenSSL::Crypto)
+
+#list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
+#find_path(MLPACK_INCLUDE_DIRS "mlpack.hpp")
+#target_include_directories(main PRIVATE ${MLPACK_INCLUDE_DIRS})
+target_include_directories(${EXTENSION_NAME} PRIVATE ${MLPACK_INCLUDE_DIRS})
+
 
 install(
   TARGETS ${EXTENSION_NAME}
