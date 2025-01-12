@@ -8,11 +8,8 @@
 #include "duckdb/main/extension_util.hpp"
 #include <duckdb/parser/parsed_data/create_scalar_function_info.hpp>
 
-// OpenSSL linked through vcpkg
-#include <openssl/opensslv.h>
-
-// mlpack
-#include <mlpack.hpp>
+#include <openssl/opensslv.h>			// OpenSSL linked through vcpkg
+#include <mlpack.hpp>					// mlpack
 
 namespace duckdb {
 
@@ -47,54 +44,60 @@ inline void MlpackMlpackVersionScalarFun(DataChunk &args, ExpressionState &state
 
 // Table code below
 
-struct MlpackTableData : public GlobalTableFunctionState, public TableFunctionData {
+static bool verbose = false;		// toggle for debug / verbosity messages
+
+struct MlpackTableData : public TableFunctionData {
     bool data_returned = false;  // Add this flag
+	int value = 0;				 // for passed in matrix start value
     vector<Value> col1;
     vector<Value> col2;
     vector<Value> col3;
     vector<Value> col4;
+    vector<Value> col5;
 
     MlpackTableData() {}
-
-    idx_t MaxThreads() const override {
-        return 1;
-    }
 };
-
-static unique_ptr<GlobalTableFunctionState> MlpackTableInit(ClientContext &context, TableFunctionInitInput &input) {
-    return make_uniq<MlpackTableData>();
-}
 
 static unique_ptr<FunctionData> MlpackTableBind(ClientContext &context, TableFunctionBindInput &input,
 												vector<LogicalType> &return_types, vector<string> &names) {
 
-    names = { "col_1", "col_2", "col_3", "col_4" };
-    return_types = { LogicalType::SMALLINT, LogicalType::INTEGER, LogicalType::BIGINT, LogicalType::DOUBLE };
+	auto data = make_uniq<MlpackTableData>();
 
-    return make_uniq<MlpackTableData>();
+	if (verbose) std::cout << "MlpackTableBind\n";
+	if (verbose) std::cout << "  old value=" << data->value << std::endl;
+	data->value = input.inputs[0].GetValue<int>();
+	if (verbose) std::cout << "  setting value=" << data->value << std::endl;
+
+    names = { "col_1", "col_2", "col_3", "col_4", "col_5" };
+    return_types = { LogicalType::SMALLINT, LogicalType::INTEGER, LogicalType::BIGINT, LogicalType::FLOAT, LogicalType::DOUBLE };
+
+    return std::move(data);
 }
 
 static void MlpackTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
 
-	auto &data = data_p.global_state->Cast<MlpackTableData>();
+	if (verbose) std::cout << "MlpackTableFunction\n";
+	auto &data = const_cast<MlpackTableData&>(data_p.bind_data->Cast<MlpackTableData>());
 
 	// if we have been called, return nothing
     if (data.data_returned) {
         output.SetCardinality(0);
         return;
     }
+	if (verbose) std::cout << "  seeing value=" << data.value << std::endl;
 
 	idx_t chunk_size = 3; // arbitrary
 
     output.SetCardinality(chunk_size);
 
-	int32_t val = 0;
+	int32_t val = data.value;
 
     for (idx_t i = 0; i < chunk_size; i++) {
         output.data[0].SetValue(i, val++);
         output.data[1].SetValue(i, val++);
         output.data[2].SetValue(i, val++);
         output.data[3].SetValue(i, val++);
+        output.data[4].SetValue(i, val++);
     }
 
 	// mark that we have been called
@@ -117,8 +120,7 @@ static void LoadInternal(DatabaseInstance &instance) {
     ExtensionUtil::RegisterFunction(instance, mlpack_mlpack_version_scalar_function);
 
 	// Register sample table function
-	auto mlpack_sample_table_function = TableFunction("mlpack_table", {}, MlpackTableFunction, MlpackTableBind);
-	mlpack_sample_table_function.init_global = MlpackTableInit;  // Add this line
+	auto mlpack_sample_table_function = TableFunction("mlpack_table", {LogicalType::INTEGER}, MlpackTableFunction, MlpackTableBind);
 	ExtensionUtil::RegisterFunction(instance, mlpack_sample_table_function);
 }
 
