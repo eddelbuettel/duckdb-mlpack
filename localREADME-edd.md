@@ -1,4 +1,11 @@
 
+### Step Zero
+
+Make sure this repo is cloned as 
+
+   git clone --recurse-submodules 
+
+
 ### Step One
 
 after initial (i.e. unmodified) build and test of binary and unittests,
@@ -53,13 +60,13 @@ D
 Expanded the (still just one) key source file to return a (static, fixed,
 boring) table
 
-edd@rob:~/git/duckdb-extension-mlpack(main)$ echo "select * from mlpack_table();" |  build/release/duckdb
-┌───────┬───────┬───────┬────────┐
-│ col_1 │ col_2 │ col_3 │ col_4  │
-│ int16 │ int32 │ int64 │ double │
-├───────┼───────┼───────┼────────┤
-│     0 │     1 │     2 │    3.0 │
-│     4 │     5 │     6 │    7.0 │
-│     8 │     9 │    10 │   11.0 │
-└───────┴───────┴───────┴────────┘
+edd@rob:~/git/duckdb-extension-mlpack(main)$ echo "select * from mlpack_table(0);" |  build/release/duckdb
+┌───────┬───────┬───────┬───────┬────────┐
+│ col_1 │ col_2 │ col_3 │ col_4 │ col_5  │
+│ int16 │ int32 │ int64 │ float │ double │
+├───────┼───────┼───────┼───────┼────────┤
+│     0 │     1 │     2 │   3.0 │    4.0 │
+│     5 │     6 │     7 │   8.0 │    9.0 │
+│    10 │    11 │    12 │  13.0 │   14.0 │
+└───────┴───────┴───────┴───────┴────────┘
 edd@rob:~/git/duckdb-extension-mlpack(main)$ 
