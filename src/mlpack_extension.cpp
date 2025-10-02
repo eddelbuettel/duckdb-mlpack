@@ -5,7 +5,6 @@
 #include "duckdb/common/exception.hpp"
 #include "duckdb/common/string_util.hpp"
 #include "duckdb/function/scalar_function.hpp"
-#include "duckdb/main/extension_util.hpp"
 #include <duckdb/parser/parsed_data/create_scalar_function_info.hpp>
 
 #include <openssl/opensslv.h>			// OpenSSL linked through vcpkg
@@ -18,7 +17,7 @@ inline void MlpackScalarFun(DataChunk &args, ExpressionState &state, Vector &res
     UnaryExecutor::Execute<string_t, string_t>(
 	    name_vector, result, args.size(),
 	    [&](string_t name) {
-			return StringVector::AddString(result, "Mlpack "+name.GetString()+" 🐥");;
+			return StringVector::AddString(result, "Mlpack " + name.GetString() + " 🐥");;
         });
 }
 
@@ -104,28 +103,28 @@ static void MlpackTableFunction(ClientContext &context, TableFunctionInput &data
 	data.data_returned = true;
 }
 
-static void LoadInternal(DatabaseInstance &instance) {
+static void LoadInternal(ExtensionLoader &loader) {
     // Register a scalar function
     auto mlpack_scalar_function = ScalarFunction("mlpack", {LogicalType::VARCHAR}, LogicalType::VARCHAR, MlpackScalarFun);
-    ExtensionUtil::RegisterFunction(instance, mlpack_scalar_function);
+    loader.RegisterFunction(mlpack_scalar_function);
 
     // Register another scalar function
-    auto mlpack_openssl_version_scalar_function = ScalarFunction("mlpack_openssl_version", {LogicalType::VARCHAR},
-																 LogicalType::VARCHAR, MlpackOpenSSLVersionScalarFun);
-    ExtensionUtil::RegisterFunction(instance, mlpack_openssl_version_scalar_function);
+    auto mlpack_openssl_version_scalar_function =
+		ScalarFunction("mlpack_openssl_version", {LogicalType::VARCHAR}, LogicalType::VARCHAR, MlpackOpenSSLVersionScalarFun);
+    loader.RegisterFunction(mlpack_openssl_version_scalar_function);
 
     // Register another scalar function
-    auto mlpack_mlpack_version_scalar_function = ScalarFunction("mlpack_mlpack_version", {LogicalType::VARCHAR},
-																LogicalType::VARCHAR, MlpackMlpackVersionScalarFun);
-    ExtensionUtil::RegisterFunction(instance, mlpack_mlpack_version_scalar_function);
+    auto mlpack_mlpack_version_scalar_function =
+		ScalarFunction("mlpack_mlpack_version", {LogicalType::VARCHAR}, LogicalType::VARCHAR, MlpackMlpackVersionScalarFun);
+    loader.RegisterFunction(mlpack_mlpack_version_scalar_function);
 
 	// Register sample table function
 	auto mlpack_sample_table_function = TableFunction("mlpack_table", {LogicalType::INTEGER}, MlpackTableFunction, MlpackTableBind);
-	ExtensionUtil::RegisterFunction(instance, mlpack_sample_table_function);
+	loader.RegisterFunction(mlpack_sample_table_function);
 }
 
-void MlpackExtension::Load(DuckDB &db) {
-	LoadInternal(*db.instance);
+void MlpackExtension::Load(ExtensionLoader &loader) {
+	LoadInternal(loader);
 }
 std::string MlpackExtension::Name() {
 	return "mlpack";
@@ -143,14 +142,13 @@ std::string MlpackExtension::Version() const {
 
 extern "C" {
 
-DUCKDB_EXTENSION_API void mlpack_init(duckdb::DatabaseInstance &db) {
-    duckdb::DuckDB db_wrapper(db);
-    db_wrapper.LoadExtension<duckdb::MlpackExtension>();
-}
+	DUCKDB_CPP_EXTENSION_ENTRY(mlpack, loader) {
+		duckdb::LoadInternal(loader);
+	}
 
-DUCKDB_EXTENSION_API const char *mlpack_version() {
-	return duckdb::DuckDB::LibraryVersion();
-}
+	DUCKDB_EXTENSION_API const char *mlpack_version() {
+		return duckdb::DuckDB::LibraryVersion();
+	}
 }
 
 #ifndef DUCKDB_EXTENSION_MAIN

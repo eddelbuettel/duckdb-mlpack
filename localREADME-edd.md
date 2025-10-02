@@ -1,10 +1,15 @@
 
+### Resources
+
+https://github.com/duckdb/community-extensions
+https://github.com/evidence-dev/duckdb_gsheets 
+https://github.com/duckdb-faiss-ext/duckdb-faiss-ext
+
 ### Step Zero
 
 Make sure this repo is cloned as 
 
    git clone --recurse-submodules 
-
 
 ### Step One
 
@@ -69,4 +74,22 @@ edd@rob:~/git/duckdb-extension-mlpack(main)$ echo "select * from mlpack_table(0)
 │     5 │     6 │     7 │   8.0 │    9.0 │
 │    10 │    11 │    12 │  13.0 │   14.0 │
 └───────┴───────┴───────┴───────┴────────┘
+
 edd@rob:~/git/duckdb-extension-mlpack(main)$ 
+
+
+### Note on extension update:  https://duckdb-gsheets.com/updating/
+
+This can be as easy as 
+
+```sh
+git submodule update --remote --recursive
+```
+
+to update both repos used here via submodules. Then
+
+```sh
+rm build/CMakeCache.txt
+make
+```
+
