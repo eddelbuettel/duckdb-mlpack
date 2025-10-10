@@ -75,7 +75,7 @@ edd@rob:~/git/duckdb-extension-mlpack(main)$ echo "select * from mlpack_table(0)
 │    10 │    11 │    12 │  13.0 │   14.0 │
 └───────┴───────┴───────┴───────┴────────┘
 
-edd@rob:~/git/duckdb-extension-mlpack(main)$ 
+edd@rob:~/git/duckdb-extension-mlpack(main)$ echo "call mlpack_table(0);" | build/release/duckdb
 
 
 ### Note on extension update:  https://duckdb-gsheets.com/updating/
@@ -92,4 +92,3 @@ to update both repos used here via submodules. Then
 rm build/CMakeCache.txt
 make
 ```
-
