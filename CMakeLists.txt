@@ -31,9 +31,6 @@ project(${TARGET_NAME})
 include_directories(src/include)
 
 set(EXTENSION_SOURCES
-  src/example_scalar_function.cpp
-  src/example_openssl_function.cpp
-  src/example_mlpack_function.cpp
   src/mlpack_table_function.cpp
   src/mlpack_adaboost.cpp
   src/mlpack_extension.cpp
