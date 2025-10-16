@@ -17,6 +17,8 @@ it is also an ideal candidate for a `duckdb` extension.
 This repository provides just that. It uses the excellent `duckdb` extension template and extends it
 minimally with an example function to run the Adaboost classifier.
 
+It is currently in 'MVP' status: _minimal_ indeed but also _viable_ as the following example shows.
+
 ## Example
 
 Because table functions in `duckdb` can only use on `select *` query, the following code snippet
