@@ -34,7 +34,7 @@ SET autoload_known_extensions=1; # for httpfs
 
 CREATE TEMP TABLE Xd AS SELECT * FROM read_csv("https://mlpack.org/datasets/iris.csv");
 CREATE TEMP TABLE X AS SELECT row_number() OVER () AS id, * FROM Xd;
-CREATE TEMP TABLE Yd AS SELECT * FROM read_csv("https://mlpack.org/datasets/iris_labels.txt");
+CREATE TEMP TABLE Yd AS SELECT * FROM read_csv("https://mlpack.org/datasets/iris_labels.csv");
 CREATE TEMP TABLE Y AS SELECT row_number() OVER () AS id, CAST(column0 AS double) as label FROM Yd;
 CREATE TEMP TABLE D AS SELECT * FROM X INNER JOIN Y ON X.id = Y.id;
 ALTER TABLE D DROP id;
@@ -46,7 +46,9 @@ EOF
 ```
 
 (Note that we ensured the two git submodules used where at the same version as our normal `duckdb`
-executable so that we could take advange of the `httpfs` extension used to do the remote read.)
+executable so that we could take advange of the `httpfs` extension used to do the remote read. If
+you not have the extension you can also use, respectively, `read_csv('path/to/iris.csv')` and
+`read_csv('path/to/iris_labels.csv')`.)
 
 Running this script (after building the extension) results in 
 
@@ -82,6 +84,12 @@ make
 
 and after a short little while `build/release/duckdb` should be available. See the documentation for
 `duckdb` extensions for more.
+
+## TODO
+
+- More examples
+- Ideally: Work out how to `SELECT` from multiple tabels, or else maybe `SELECT` into temp. tables
+  and pass temp. table names into routine
 
 ## Author
 
