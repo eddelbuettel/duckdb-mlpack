@@ -70,7 +70,19 @@ $
 
 which is the result we get from, say, the `adaboost` example running on the same data via the R
 extension (from [this repo](https://github.com/eddelbuettel/rcppmlpack-examples)): one misclassified
-entry (when predicting the on training data -- the example here is _minimal_).
+entry (when predicting the on training data -- the example here is _minimal_):
+
+```r
+> data(iris)
+> X <- t(as.matrix(iris[,1:4]))
+> y <- as.integer(iris[,5]) - 1
+> res <- rcppmlpackexamples::adaBoost(X, y)
+> table(res$predicted)
+
+ 0  1  2 
+50 49 51 
+>
+```
 
 ## Installation
 
