@@ -56,6 +56,7 @@ OperatorResultType MlAdaboostFunction(ExecutionContext &context, TableFunctionIn
 
 	// we now have a matrix m and its last column is the labels, let's extract it
 	arma::Row<size_t> labelsvec = arma::conv_to<arma::Row<size_t>>::from(dataset.col(k-1));
+	if (arma::min(labelsvec) != 0) labelsvec = labelsvec - 1;
 	if (verbose) labelsvec.print("labels");
 	// and shed it, and tranpose
 	dataset.shed_col(k-1);
