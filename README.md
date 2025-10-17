@@ -73,9 +73,8 @@ extension (from [this repo](https://github.com/eddelbuettel/rcppmlpack-examples)
 entry (when predicting the on training data -- the example here is _minimal_):
 
 ```r
-> data(iris)
-> X <- t(as.matrix(iris[,1:4]))
-> y <- as.integer(iris[,5]) - 1
+> X <- t(as.matrix(read.csv("https://mlpack.org/datasets/iris.csv")))
+> y <- as.integer(read.csv("https://mlpack.org/datasets/iris_labels.csv", header=FALSE)[,1]) - 1L
 > res <- rcppmlpackexamples::adaBoost(X, y)
 > table(res$predicted)
 
@@ -90,7 +89,7 @@ Requirements should be the same as for `duckdb` and `mlpack`: a recent compiler,
 also a local Armadillo installation as we have not told `cmake` yet to install Armadillo if not
 found.
 
-The just say
+Then just say
 
 ```sh
 make
@@ -101,13 +100,19 @@ and after a short little while `build/release/duckdb` should be available. See t
 
 ## TODO
 
-- More examples
+- More examples of model fitting and prediction
+- Maybe set up model serialization into table to predict on new data
 - Ideally: Work out how to `SELECT` from multiple tabels, or else maybe `SELECT` into temp. tables
   and pass temp. table names into routine
+- Maybe add `mlpack` as a `git submodule` 
 
 ## Author
 
-Dirk Eddelbuettel
+Dirk Eddelbuettel for this repo
+
+The duckdb authors for `duckdb`
+
+The mlpack authors for `mlpack`
 
 ## License
 
