@@ -98,6 +98,13 @@ make
 and after a short little while `build/release/duckdb` should be available. See the documentation for
 `duckdb` extensions for more.
 
+The build may currently require that `mlpack` (and `armadillo`) are installed system-wide. On a
+Debian / Ubuntu system the following takes care of that
+
+```sh
+sudo apt install libmlpack-dev
+```
+
 ## TODO
 
 - More examples of model fitting and prediction
