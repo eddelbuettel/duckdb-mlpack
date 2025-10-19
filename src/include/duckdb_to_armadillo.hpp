@@ -10,37 +10,35 @@
 namespace duckdb {
 
 template<typename T>
-arma::Mat<T> get_armadillo_matrix(ClientContext &context, std::string &table) {
+arma::Mat<T> get_armadillo_matrix_transposed(ClientContext &context, std::string &table) {
 
 	Connection con(*context.db);
 
 	std::string query = std::string("SELECT * FROM ") + table + std::string(";");
-	//std::cout << "  query: " << query << std::endl;
 	auto result = con.Query(query);
 
 	idx_t n = result->RowCount(), k = result->ColumnCount();
-	//std::cout << "  expecting " << n << " by " << k << std::endl;
 
-	arma::Mat<T> m(n, k);
+	arma::Mat<T> m(k, n);					// transpose while reading, i.e. row i becomes col i
 	idx_t row = 0;
 	while (auto chunk = result->Fetch()) {
-		for (idx_t row_idx = 0; row_idx < result->RowCount(); ++row_idx) {
-			arma::Row<T> r(k);
+		for (idx_t row_idx = 0; row_idx < n; ++row_idx) {
+			arma::Col<T> r(k);
 			for (idx_t col_idx = 0; col_idx < k; col_idx++) {
 				r(col_idx) = result->GetValue(col_idx, row_idx).GetValue<T>();
 			}
-			m.row(row++) = r;
+			m.col(row++) = r;
 		}
 	}
-    // m.print("m");
+    //m.print("m");
 	return m;
 }
 
 template<typename T>
 arma::Row<T> get_armadillo_row(ClientContext &context, std::string &table) {
-	arma::Mat<T> m = get_armadillo_matrix<T>(context, table);
-	assert(m.n_cols == 1);
-	arma::Row<T> r = m.col(0).t();
+	arma::Mat<T> m = get_armadillo_matrix_transposed<T>(context, table);
+	assert(m.n_rows == 1);
+	arma::Row<T> r = m.row(0);
 	//r.print("row");
 	return r;
 }

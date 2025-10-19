@@ -31,7 +31,7 @@ void MlpackAdaboostTableFunction(ClientContext &context, TableFunctionInput &dat
         return;
     }
 
-	arma::mat dataset = get_armadillo_matrix<double>(context,  resdata.features).t();
+	arma::mat dataset = get_armadillo_matrix_transposed<double>(context,  resdata.features);
     if (verbose) dataset.print("dataset");
 	arma::Row<size_t> labelsvec = get_armadillo_row<size_t>(context,  resdata.labels);
 	if (arma::min(labelsvec) != 0) labelsvec = labelsvec - 1;
