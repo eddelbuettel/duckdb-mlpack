@@ -22,10 +22,10 @@ It is currently in 'MVP' status: _minimal_ indeed but also _viable_ as the follo
 ## Example
 
 Because table functions in `duckdb` can only use on `select *` query, the following code snippet
-first creates a temporary table joining the two data sets for 'features' and 'labels' (or `X` and
-`y` in more statistical terminology) before reading from the combined table.  Note also how we 
-take advantage of the remote `httpfs` reader in `duckdb`; we could equally well read a local file,
-or one from S3, or ...
+first creates a temporary tables for the two data sets for 'features' and 'labels' (or `X` and `y`
+in more statistical terminology) which are passed a strings to the function and read therein.  Note
+also how we take advantage of the remote `httpfs` reader in `duckdb`; we could equally well read a
+local file, or one from S3, or ...
 
 ```sh
 #!/bin/bash
@@ -34,16 +34,15 @@ cat <<EOF | build/release/duckdb
 SET autoinstall_known_extensions=1;
 SET autoload_known_extensions=1; # for httpfs
 
-CREATE TEMP TABLE Xd AS SELECT * FROM read_csv("https://mlpack.org/datasets/iris.csv");
-CREATE TEMP TABLE X AS SELECT row_number() OVER () AS id, * FROM Xd;
-CREATE TEMP TABLE Yd AS SELECT * FROM read_csv("https://mlpack.org/datasets/iris_labels.csv");
-CREATE TEMP TABLE Y AS SELECT row_number() OVER () AS id, CAST(column0 AS double) as label FROM Yd;
-CREATE TEMP TABLE D AS SELECT * FROM X INNER JOIN Y ON X.id = Y.id;
-ALTER TABLE D DROP id;
-ALTER TABLE D DROP id_1;
-CREATE TEMP TABLE A AS SELECT * FROM mlpack_adaboost((SELECT * FROM D));
+CREATE TABLE X AS SELECT * FROM read_csv("https://mlpack.org/datasets/iris.csv");
+CREATE TABLE Y AS SELECT * FROM read_csv("https://mlpack.org/datasets/iris_labels.csv");
+
+CREATE TEMP TABLE A AS SELECT * FROM mlpack_adaboost("X", "Y");
 
 SELECT COUNT(*) as n, predicted FROM A GROUP BY predicted;
+
+DROP TABLE X;
+DROP TABLE Y;
 EOF
 ```
 
@@ -55,7 +54,7 @@ you not have the extension you can also use, respectively, `read_csv('path/to/ir
 Running this script (after building the extension) results in 
 
 ```sh
-$ ./sampleCallRemote.sh 
+$ ./sampleCall.sh 
 Misclassified: 1
 ┌───────┬───────────┐
 │   n   │ predicted │
@@ -109,8 +108,8 @@ sudo apt install libmlpack-dev
 
 - More examples of model fitting and prediction
 - Maybe set up model serialization into table to predict on new data
-- Ideally: Work out how to `SELECT` from multiple tabels, or else maybe `SELECT` into temp. tables
-  and pass temp. table names into routine
+- Ideally: Work out how to `SELECT` from multiple tabels
+- [DONE] Else maybe `SELECT` into temp. tables and pass temp. table names into routine
 - Maybe add `mlpack` as a `git submodule` 
 
 ## Author
