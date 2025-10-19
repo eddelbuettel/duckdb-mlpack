@@ -1,31 +1,23 @@
 
 #pragma once
 
-#include "duckdb.hpp"
-#include <duckdb/storage/object_cache.hpp>
-
-#include <mlpack.hpp>					// mlpack
+#include <duckdb.hpp>
+#include <mlpack.hpp>
+#include <duckdb_to_armadillo.hpp>
 
 namespace duckdb {
 
-struct MlAdaboostState : public GlobalTableFunctionState {
-	// nothing here as currently do not need state
-};
-
 struct MlAdaboostData : TableFunctionData {
-	string key;
+    bool data_returned = false;
+	std::string features{""};
+	std::string labels{""};
  	vector<LogicalType> return_types;
 	vector<string> names;
 };
 
-unique_ptr<GlobalTableFunctionState> MlAdaboostGlobalInit(ClientContext &context, TableFunctionInitInput &input);
+unique_ptr<FunctionData> MlpackAdaboostTableBind(ClientContext &context, TableFunctionBindInput &input,
+										 vector<LogicalType> &return_types, vector<string> &names);
 
-unique_ptr<LocalTableFunctionState> MlAdaboostLocalInit(ExecutionContext &context, TableFunctionInitInput &data_p, GlobalTableFunctionState *global_state);
-
-unique_ptr<FunctionData> MlAdaboostTableBind(ClientContext &context, TableFunctionBindInput &input, vector<LogicalType> &return_types, vector<string> &names);
-
-OperatorResultType MlAdaboostFunction(ExecutionContext &context, TableFunctionInput &data_p, DataChunk &input, DataChunk &output);
-
-OperatorFinalizeResultType MlAdaboostFinaliseFunction(ExecutionContext &context, TableFunctionInput &data_p, DataChunk &outdata_p);
+void MlpackAdaboostTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output);
 
 }

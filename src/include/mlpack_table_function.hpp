@@ -1,8 +1,7 @@
 #pragma once
 
-#include "duckdb.hpp"
-
-#include <mlpack.hpp>					// mlpack
+#include <duckdb.hpp>
+#include <mlpack.hpp>
 
 namespace duckdb {
 

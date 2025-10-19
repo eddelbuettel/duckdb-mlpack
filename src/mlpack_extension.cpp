@@ -18,22 +18,16 @@ namespace duckdb {
 // Function loading
 
 static void LoadInternal(ExtensionLoader &loader) {
+	auto &dbinstance = loader.GetDatabaseInstance();
+	Connection con(dbinstance);
+
 	// Register sample table function returning a table (and consuming a scalar (or two, commented out)
-	auto mlpack_sample_table_function = TableFunction("mlpack_table", {LogicalType::INTEGER /*, LogicalType::VARCHAR */}, MlpackTableFunction, MlpackTableBind);
+	auto mlpack_sample_table_function = TableFunction("mlpack_table", { LogicalType::INTEGER /*, LogicalType::VARCHAR */ }, MlpackTableFunction, MlpackTableBind);
 	loader.RegisterFunction(mlpack_sample_table_function);
 
 	// Register adaboost example
-	{
-		TableFunction mlpack_adaboost_function("mlpack_adaboost",
-											   { LogicalType::TABLE },
-											   nullptr /*MlAdaboostTableFunction*/,
-											   MlAdaboostTableBind,
-											   MlAdaboostGlobalInit,
-											   MlAdaboostLocalInit);
-		mlpack_adaboost_function.in_out_function = MlAdaboostFunction;
-		mlpack_adaboost_function.in_out_function_final = MlAdaboostFinaliseFunction;
-		loader.RegisterFunction(mlpack_adaboost_function);
-	}
+	auto mlpack_adaboost_function = TableFunction("mlpack_adaboost", { LogicalType::VARCHAR, LogicalType::VARCHAR }, MlpackAdaboostTableFunction, MlpackAdaboostTableBind);
+	loader.RegisterFunction(mlpack_adaboost_function);
 }
 
 void MlpackExtension::Load(ExtensionLoader &loader) {
