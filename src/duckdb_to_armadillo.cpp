@@ -19,7 +19,7 @@ std::map<std::string, std::string> get_parameters(ClientContext &context, std::s
 		for (idx_t row_idx = 0; row_idx < n; row_idx++) {
 			std::string key = result->GetValue(0, row_idx).GetValue<std::string>();
 			std::string val = result->GetValue(1, row_idx).GetValue<std::string>();
-			std::cout << key << " -> " << val << std::endl;
+			//std::cout << key << " -> " << val << std::endl;
 			params.try_emplace(key, val);
 		}
 	}
