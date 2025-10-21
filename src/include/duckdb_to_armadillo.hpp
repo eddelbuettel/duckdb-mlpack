@@ -9,6 +9,8 @@
 
 namespace duckdb {
 
+std::map<std::string, std::string> get_parameters(ClientContext &context, std::string parameters);
+
 template<typename T>
 arma::Mat<T> get_armadillo_matrix_transposed(ClientContext &context, std::string &table) {
 

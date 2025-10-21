@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 
 # Set extension name here
 set(TARGET_NAME mlpack)
@@ -20,9 +20,11 @@ find_package(OpenSSL REQUIRED)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 
-# mlpack
-find_package(mlpack REQUIRED)
-find_package(Armadillo REQUIRED)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
+
+# mlpack (and armadillo, ensmallen, cereal, ...)
+include(${CMAKE_CURRENT_SOURCE_DIR}/CMake/mlpack.cmake)
+fetch_mlpack(COMPILE_OPENBLAS FALSE)
 
 set(EXTENSION_NAME ${TARGET_NAME}_extension)
 set(LOADABLE_EXTENSION_NAME ${TARGET_NAME}_loadable_extension)
@@ -31,6 +33,7 @@ project(${TARGET_NAME})
 include_directories(src/include)
 
 set(EXTENSION_SOURCES
+  src/duckdb_to_armadillo.cpp
   src/mlpack_table_function.cpp
   src/mlpack_adaboost.cpp
   src/mlpack_extension.cpp
@@ -47,7 +50,7 @@ target_link_libraries(${LOADABLE_EXTENSION_NAME} OpenSSL::SSL OpenSSL::Crypto ${
 #find_path(MLPACK_INCLUDE_DIRS "mlpack.hpp")
 #target_include_directories(main PRIVATE ${MLPACK_INCLUDE_DIRS})
 target_include_directories(${EXTENSION_NAME} PRIVATE ${MLPACK_INCLUDE_DIRS})
-
+message(STATUS ${MLPACK_INCLUDE_DIRS})
 
 install(
   TARGETS ${EXTENSION_NAME}

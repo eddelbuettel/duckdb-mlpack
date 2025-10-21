@@ -22,11 +22,11 @@ static void LoadInternal(ExtensionLoader &loader) {
 	Connection con(dbinstance);
 
 	// Register sample table function returning a table (and consuming a scalar (or two, commented out)
-	auto mlpack_sample_table_function = TableFunction("mlpack_table", { LogicalType::INTEGER /*, LogicalType::VARCHAR */ }, MlpackTableFunction, MlpackTableBind);
+	auto mlpack_sample_table_function = TableFunction("mlpack_table", { LogicalType::INTEGER }, MlpackTableFunction, MlpackTableBind);
 	loader.RegisterFunction(mlpack_sample_table_function);
 
 	// Register adaboost example
-	auto mlpack_adaboost_function = TableFunction("mlpack_adaboost", { LogicalType::VARCHAR, LogicalType::VARCHAR }, MlpackAdaboostTableFunction, MlpackAdaboostTableBind);
+	auto mlpack_adaboost_function = TableFunction("mlpack_adaboost", { LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR }, MlpackAdaboostTableFunction, MlpackAdaboostTableBind);
 	loader.RegisterFunction(mlpack_adaboost_function);
 }
 

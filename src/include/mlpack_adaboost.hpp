@@ -11,6 +11,7 @@ struct MlAdaboostData : TableFunctionData {
     bool data_returned = false;
 	std::string features{""};
 	std::string labels{""};
+	std::string parameters{""};
  	vector<LogicalType> return_types;
 	vector<string> names;
 };

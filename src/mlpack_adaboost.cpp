@@ -12,6 +12,7 @@ unique_ptr<FunctionData> MlpackAdaboostTableBind(ClientContext &context, TableFu
 	auto resdata = make_uniq<MlAdaboostData>(); // 'resdata' for result data i.e. outgoing
 	resdata->features = input.inputs[0].GetValue<std::string>();
 	resdata->labels = input.inputs[1].GetValue<std::string>();
+	resdata->parameters = input.inputs[2].GetValue<std::string>();
     names = { "predicted" };
     return_types = { LogicalType::INTEGER };
 	resdata->return_types = return_types;
@@ -31,20 +32,21 @@ void MlpackAdaboostTableFunction(ClientContext &context, TableFunctionInput &dat
         return;
     }
 
-	arma::mat dataset = get_armadillo_matrix_transposed<double>(context,  resdata.features);
+	// Explanatory variables i.e. 'features'
+	arma::mat dataset = get_armadillo_matrix_transposed<double>(context, resdata.features);
     if (verbose) dataset.print("dataset");
+	// Dependent variable i.e. 'labels'
 	arma::Row<size_t> labelsvec = get_armadillo_row<size_t>(context,  resdata.labels);
 	if (arma::min(labelsvec) != 0) labelsvec = labelsvec - 1;
     if (verbose) labelsvec.print("labelsvec");
-
+	std::map<std::string, std::string> params = get_parameters(context, resdata.parameters);
 
     using PerceptronType = mlpack::Perceptron<mlpack::SimpleWeightUpdate, mlpack::ZeroInitialization, arma::mat>;
     mlpack::AdaBoost<PerceptronType, arma::mat> a;
     int numClasses = arma::max(labelsvec) + 1;
-	// these could be / should parameters
-	constexpr int iterations = 100;
-	constexpr double tolerance = 2e-10;
-	constexpr int perceptronIter = 400;
+	const int iterations     = params.count("iterations") > 0     ? std::stoi(params["iterations"])     : 100;
+	const double tolerance   = params.count("tolerance") > 0      ? std::stod(params["tolerance"])      : 2e-10;
+	const int perceptronIter = params.count("perceptronIter") > 0 ? std::stoi(params["perceptronIter"]) : 400;
 
     double ztProduct = a.Train(dataset, labelsvec, numClasses, iterations, tolerance, perceptronIter);
 

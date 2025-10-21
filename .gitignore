@@ -8,3 +8,6 @@ test/python/__pycache__/
 .Rhistory
 local*
 data
+GPATH
+GRTAGS
+GTAGS
