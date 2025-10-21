@@ -18,19 +18,7 @@ endif()
 # Note that it should also be removed from vcpkg.json to prevent needlessly installing it..
 find_package(OpenSSL REQUIRED)
 
-# # libgomp for Armadillo
-# find_package(OpenMP REQUIRED)
-# if (OpenMP_FOUND)
-#     message(STATUS "OpenMP found and enabled.")
-#     # Add OpenMP compiler flags
-#     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-#     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-# else()
-#     message(FATAL_ERROR "OpenMP not found. Please install an OpenMP-capable compiler or library.")
-# endif()
-
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
-
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 
 # mlpack (and armadillo, ensmallen, cereal, ...)
@@ -50,7 +38,7 @@ set(EXTENSION_SOURCES
     src/duckdb_to_armadillo.cpp
     src/mlpack_table_function.cpp
     src/mlpack_adaboost.cpp
-    src/mlpack_linearregression.cpp
+    src/mlpack_linear_regression.cpp
     src/mlpack_extension.cpp
 )
 

@@ -1,4 +1,4 @@
-#include <mlpack_linearregression.hpp>
+#include <mlpack_linear_regression.hpp>
 #include <mlpack/methods/linear_regression/linear_regression.hpp>
 
 namespace duckdb {
@@ -17,7 +17,7 @@ unique_ptr<FunctionData> MlpackLinRegTableBind(ClientContext &context, TableFunc
 }
 
 void MlpackLinRegTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
-	bool verbose = true;
+	bool verbose = false;
 	auto &resdata = const_cast<MlpackLinRegData&>(data_p.bind_data->Cast<MlpackLinRegData>());
 
 	// if we have been called, return nothing
@@ -37,15 +37,18 @@ void MlpackLinRegTableFunction(ClientContext &context, TableFunctionInput &data_
 
 	const double lambda    = params.count("lambda") > 0    ? std::stoi(params["lambda"])                    : 0.0;
 	const bool   intercept = params.count("intercept") > 0 ? (params["intercept"] == "true" ? true : false) : true;
-
+	if (verbose) {
+		std::cout << "lambda : " << lambda << std::endl;
+		std::cout << "intercept : " << (intercept ? "yes" : "no") << std::endl;
+	}
 	mlpack::LinearRegression lr(dataset, labelsvec, lambda, intercept);
 
 	auto n = labelsvec.n_elem;
     arma::rowvec fittedvalues(n);
     lr.Predict(dataset, fittedvalues);
 	if (verbose) fittedvalues.print("fitted");
-    //size_t countError = arma::accu(labelsvec != predictedLabels);
-	//std::cout << "Misclassified: " << countError << std::endl;
+	auto rmse = std::sqrt( arma::as_scalar( arma::mean( arma::square( labelsvec - fittedvalues ) ) ) );
+	std::cout << "RMSE: " << rmse << std::endl;
 
 	output.SetCardinality(n);
     for (idx_t i = 0; i < n; i++) {

@@ -4,7 +4,7 @@
 
 #include "mlpack_table_function.hpp"
 #include "mlpack_adaboost.hpp"
-#include "mlpack_linearregression.hpp"
+#include "mlpack_linear_regression.hpp"
 
 #include <duckdb.hpp>
 #include <duckdb/common/exception.hpp>
@@ -31,7 +31,7 @@ static void LoadInternal(ExtensionLoader &loader) {
 	loader.RegisterFunction(mlpack_adaboost_function);
 
 	// Register linear regression example
-	auto mlpack_linreg_function = TableFunction("mlpack_linearregression", { LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR }, MlpackLinRegTableFunction, MlpackLinRegTableBind);
+	auto mlpack_linreg_function = TableFunction("mlpack_linear_regression", { LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR }, MlpackLinRegTableFunction, MlpackLinRegTableBind);
 	loader.RegisterFunction(mlpack_linreg_function);
 }
 
