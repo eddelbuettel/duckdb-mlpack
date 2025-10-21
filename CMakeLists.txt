@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Consider using ccache
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
-  set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
 endif()
 
 # DuckDB's extension distribution supports vcpkg. As such, dependencies can be added in ./vcpkg.json and then
@@ -19,24 +19,27 @@ endif()
 find_package(OpenSSL REQUIRED)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
-
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 
 # mlpack (and armadillo, ensmallen, cereal, ...)
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMake/mlpack.cmake)
+set(MLPACK_DISABLE_OPENMP ON)
 fetch_mlpack(COMPILE_OPENBLAS FALSE)
+
 
 set(EXTENSION_NAME ${TARGET_NAME}_extension)
 set(LOADABLE_EXTENSION_NAME ${TARGET_NAME}_loadable_extension)
 
 project(${TARGET_NAME})
 include_directories(src/include)
+include_directories(${MLPACK_INCLUDE_DIRS})
 
 set(EXTENSION_SOURCES
-  src/duckdb_to_armadillo.cpp
-  src/mlpack_table_function.cpp
-  src/mlpack_adaboost.cpp
-  src/mlpack_extension.cpp
+    src/duckdb_to_armadillo.cpp
+    src/mlpack_table_function.cpp
+    src/mlpack_adaboost.cpp
+    src/mlpack_linear_regression.cpp
+    src/mlpack_extension.cpp
 )
 
 build_static_extension(${TARGET_NAME} ${EXTENSION_SOURCES})
