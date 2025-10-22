@@ -19,8 +19,8 @@ jobs:
       duckdb_version: v1.4.1
       ci_tools_version: v1.4.1
       extension_name: mlpack
-      # musl fails with lapack/fortran even with fortran set (next step)
-      # exclude_archs: "linux_amd64_musl"
+      # mingw fails, as does wasm_eh, and osx runs into a patchable cereal issue
+      exclude_archs: "windows_amd64_mingw;osx_amd64;osx_arm64;wasm_mvp;wasm_eh;wasm_threads"
       # add fortran and omp for armadillo below mlpack
       extra_toolchains: "fortran;omp"    
 
