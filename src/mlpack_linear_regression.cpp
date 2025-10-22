@@ -14,7 +14,6 @@ unique_ptr<FunctionData> MlpackLinRegTableBind(ClientContext &context, TableFunc
 	resdata->return_types = return_types;
 	resdata->names = names;
     return std::move(resdata);
-
 }
 
 void MlpackLinRegTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {

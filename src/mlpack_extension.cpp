@@ -27,7 +27,9 @@ static void LoadInternal(ExtensionLoader &loader) {
 	loader.RegisterFunction(mlpack_sample_table_function);
 
 	// Register adaboost example
-	auto mlpack_adaboost_function = TableFunction("mlpack_adaboost", { LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR }, MlpackAdaboostTableFunction, MlpackAdaboostTableBind);
+	auto mlpack_adaboost_function = TableFunction("mlpack_adaboost",
+												  { LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR,  LogicalType::VARCHAR },
+												  MlpackAdaboostTableFunction, MlpackAdaboostTableBind);
 	loader.RegisterFunction(mlpack_adaboost_function);
 
 	// Register linear regression example

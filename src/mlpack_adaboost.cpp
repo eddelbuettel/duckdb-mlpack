@@ -13,6 +13,7 @@ unique_ptr<FunctionData> MlpackAdaboostTableBind(ClientContext &context, TableFu
 	resdata->features = input.inputs[0].GetValue<std::string>();
 	resdata->labels = input.inputs[1].GetValue<std::string>();
 	resdata->parameters = input.inputs[2].GetValue<std::string>();
+	resdata->model = input.inputs[3].GetValue<std::string>();
     names = { "predicted" };
     return_types = { LogicalType::INTEGER };
 	resdata->return_types = return_types;
@@ -49,6 +50,9 @@ void MlpackAdaboostTableFunction(ClientContext &context, TableFunctionInput &dat
 	const int perceptronIter = params.count("perceptronIter") > 0 ? std::stoi(params["perceptronIter"]) : 400;
 
     double ztProduct = a.Train(dataset, labelsvec, numClasses, iterations, tolerance, perceptronIter);
+
+	if (verbose) std::cout << SerializeObject<mlpack::AdaBoost<PerceptronType, arma::mat>>(a) << std::endl;
+	store_model(context, resdata.model, SerializeObject<mlpack::AdaBoost<PerceptronType, arma::mat>>(a));
 
     arma::Row<size_t> predictedLabels;
     a.Classify(dataset, predictedLabels);
