@@ -2,7 +2,7 @@
 // Simple matrix and vector accessors from (possibly temporary) tables
 // For simplicity we assume 'features' are of type double, and labels are of type int64
 
-#include "duckdb_to_armadillo.hpp"
+#include <duckdb_utilities.hpp>
 
 namespace duckdb {
 
@@ -26,5 +26,11 @@ std::map<std::string, std::string> get_parameters(ClientContext &context, std::s
 	return params;
 }
 
+	void store_model(ClientContext &context, std::string model_table, std::string model_as_json) {
+	Connection con(*context.db);
+
+	std::string query = std::string("INSERT INTO " + model_table + " VALUES ('" + model_as_json + "');");
+	con.Query(query);
+}
 
 }

@@ -8,8 +8,8 @@ static bool verbose = false;
 // mlpack adaboost accessor
 
 unique_ptr<FunctionData> MlpackAdaboostTableBind(ClientContext &context, TableFunctionBindInput &input, vector<LogicalType> &return_types, vector<string> &names) {
-	if (verbose) std::cout << "MlAdaboostTableBind\n";
-	auto resdata = make_uniq<MlAdaboostData>(); // 'resdata' for result data i.e. outgoing
+	if (verbose) std::cout << "MlpackAdaboostTableBind\n";
+	auto resdata = make_uniq<MlpackModelData>();
 	resdata->features = input.inputs[0].GetValue<std::string>();
 	resdata->labels = input.inputs[1].GetValue<std::string>();
 	resdata->parameters = input.inputs[2].GetValue<std::string>();
@@ -23,7 +23,7 @@ unique_ptr<FunctionData> MlpackAdaboostTableBind(ClientContext &context, TableFu
 void MlpackAdaboostTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
 
 	if (verbose) std::cout << "MlpackAdaboostFunction\n";
-	auto &resdata = const_cast<MlAdaboostData&>(data_p.bind_data->Cast<MlAdaboostData>());
+	auto &resdata = const_cast<MlpackModelData&>(data_p.bind_data->Cast<MlpackModelData>());
 
 	// if we have been called, return nothing
     if (resdata.data_returned) {

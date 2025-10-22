@@ -21,9 +21,11 @@ find_package(OpenSSL REQUIRED)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 
-# mlpack (and armadillo, ensmallen, cereal, ...)
+# Find OpenMP (and link below)
+find_package(OpenMP REQUIRED)
+
+# Find mlpack (and armadillo, ensmallen, cereal, ...)
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMake/mlpack.cmake)
-set(MLPACK_DISABLE_OPENMP ON)
 fetch_mlpack(COMPILE_OPENBLAS FALSE)
 
 
@@ -35,7 +37,7 @@ include_directories(src/include)
 include_directories(${MLPACK_INCLUDE_DIRS})
 
 set(EXTENSION_SOURCES
-    src/duckdb_to_armadillo.cpp
+    src/duckdb_utilities.cpp
     src/mlpack_table_function.cpp
     src/mlpack_adaboost.cpp
     src/mlpack_linear_regression.cpp
@@ -46,8 +48,8 @@ build_static_extension(${TARGET_NAME} ${EXTENSION_SOURCES})
 build_loadable_extension(${TARGET_NAME} " " ${EXTENSION_SOURCES})
 
 # Link OpenSSL in both the static library as the loadable extension
-target_link_libraries(${EXTENSION_NAME} OpenSSL::SSL OpenSSL::Crypto ${ARMADILLO_LIBRARIES})
-target_link_libraries(${LOADABLE_EXTENSION_NAME} OpenSSL::SSL OpenSSL::Crypto ${ARMADILLO_LIBRARIES})
+target_link_libraries(${EXTENSION_NAME} OpenSSL::SSL OpenSSL::Crypto ${ARMADILLO_LIBRARIES} OpenMP::OpenMP_CXX)
+target_link_libraries(${LOADABLE_EXTENSION_NAME} OpenSSL::SSL OpenSSL::Crypto ${ARMADILLO_LIBRARIES} OpenMP::OpenMP_CXX)
 
 #list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 #find_path(MLPACK_INCLUDE_DIRS "mlpack.hpp")

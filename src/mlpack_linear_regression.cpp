@@ -4,10 +4,11 @@
 namespace duckdb {
 
 unique_ptr<FunctionData> MlpackLinRegTableBind(ClientContext &context, TableFunctionBindInput &input, vector<LogicalType> &return_types, vector<string> &names) {
-	auto resdata = make_uniq<MlpackLinRegData>(); // 'resdata' for result data i.e. outgoing
+	auto resdata = make_uniq<MlpackModelData>(); // 'resdata' for result data i.e. outgoing
 	resdata->features = input.inputs[0].GetValue<std::string>();
 	resdata->labels = input.inputs[1].GetValue<std::string>();
 	resdata->parameters = input.inputs[2].GetValue<std::string>();
+	resdata->model = input.inputs[3].GetValue<std::string>();
     names = { "fitted" };
     return_types = { LogicalType::DOUBLE };
 	resdata->return_types = return_types;
@@ -18,7 +19,7 @@ unique_ptr<FunctionData> MlpackLinRegTableBind(ClientContext &context, TableFunc
 
 void MlpackLinRegTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
 	bool verbose = false;
-	auto &resdata = const_cast<MlpackLinRegData&>(data_p.bind_data->Cast<MlpackLinRegData>());
+	auto &resdata = const_cast<MlpackModelData&>(data_p.bind_data->Cast<MlpackModelData>());
 
 	// if we have been called, return nothing
     if (resdata.data_returned) {
@@ -42,6 +43,9 @@ void MlpackLinRegTableFunction(ClientContext &context, TableFunctionInput &data_
 		std::cout << "intercept : " << (intercept ? "yes" : "no") << std::endl;
 	}
 	mlpack::LinearRegression lr(dataset, labelsvec, lambda, intercept);
+
+	if (verbose) std::cout << SerializeObject<mlpack::LinearRegression<>>(lr) << std::endl;
+	store_model(context, resdata.model, SerializeObject<mlpack::LinearRegression<>>(lr));
 
 	auto n = labelsvec.n_elem;
     arma::rowvec fittedvalues(n);
