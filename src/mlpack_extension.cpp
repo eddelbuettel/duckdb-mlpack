@@ -12,7 +12,7 @@
 #include <duckdb/function/scalar_function.hpp>
 #include <duckdb/parser/parsed_data/create_scalar_function_info.hpp>
 
-#include <mlpack.hpp>					// mlpack
+#include <mlpack.hpp> // mlpack
 
 namespace duckdb {
 
@@ -23,23 +23,25 @@ static void LoadInternal(ExtensionLoader &loader) {
 	Connection con(dbinstance);
 
 	// Register sample table function returning a table (and consuming a scalar (or two, commented out)
-	auto mlpack_sample_table_function = TableFunction("mlpack_table", { LogicalType::INTEGER }, MlpackTableFunction, MlpackTableBind);
+	auto mlpack_sample_table_function =
+	    TableFunction("mlpack_table", {LogicalType::INTEGER}, MlpackTableFunction, MlpackTableBind);
 	loader.RegisterFunction(mlpack_sample_table_function);
 
 	// Register adaboost example
-	auto mlpack_adaboost_function = TableFunction("mlpack_adaboost",
-												  { LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR,  LogicalType::VARCHAR },
-												  MlpackAdaboostTableFunction, MlpackAdaboostTableBind);
+	auto mlpack_adaboost_function = TableFunction(
+	    "mlpack_adaboost", {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
+	    MlpackAdaboostTableFunction, MlpackAdaboostTableBind);
 	loader.RegisterFunction(mlpack_adaboost_function);
 
 	// Register linear regression example fit and prediction
-	auto mlpack_linreg_fit_function = TableFunction("mlpack_linear_regression_fit",
-													{ LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR },
-													MlpackLinRegTableFunction, MlpackLinRegTableBind);
+	auto mlpack_linreg_fit_function =
+	    TableFunction("mlpack_linear_regression_fit",
+	                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
+	                  MlpackLinRegTableFunction, MlpackLinRegTableBind);
 	loader.RegisterFunction(mlpack_linreg_fit_function);
-	auto mlpack_linreg_pred_function = TableFunction("mlpack_linear_regression_pred",
-													{ LogicalType::VARCHAR, LogicalType::VARCHAR },
-													MlpackLinRegPredTableFunction, MlpackLinRegPredTableBind);
+	auto mlpack_linreg_pred_function =
+	    TableFunction("mlpack_linear_regression_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
+	                  MlpackLinRegPredTableFunction, MlpackLinRegPredTableBind);
 	loader.RegisterFunction(mlpack_linreg_pred_function);
 }
 
@@ -62,13 +64,13 @@ std::string MlpackExtension::Version() const {
 
 extern "C" {
 
-	DUCKDB_CPP_EXTENSION_ENTRY(mlpack, loader) {
-		duckdb::LoadInternal(loader);
-	}
+DUCKDB_CPP_EXTENSION_ENTRY(mlpack, loader) {
+	duckdb::LoadInternal(loader);
+}
 
-	DUCKDB_EXTENSION_API const char *mlpack_version() {
-		return duckdb::DuckDB::LibraryVersion();
-	}
+DUCKDB_EXTENSION_API const char *mlpack_version() {
+	return duckdb::DuckDB::LibraryVersion();
+}
 }
 
 #ifndef DUCKDB_EXTENSION_MAIN
