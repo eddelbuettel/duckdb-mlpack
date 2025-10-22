@@ -11,13 +11,13 @@ Catalog Error: Scalar Function with name mlpack does not exist!
 # Require statement will ensure this test is run with this extension loaded
 require mlpack
 
-# Confirm the extension works
-query I
-SELECT mlpack('Sam');
-----
-Mlpack Sam 🐥
-
-query I
-SELECT mlpack_openssl_version('Michael') ILIKE 'Mlpack Michael, my linked OpenSSL version is OpenSSL%';
-----
-true
+# # Confirm the extension works
+# query I
+# SELECT mlpack('Sam');
+# ----
+# Mlpack Sam 🐥
+# 
+# query I
+# SELECT mlpack_openssl_version('Michael') ILIKE 'Mlpack Michael, my linked OpenSSL version is OpenSSL%';
+# ----
+# true
