@@ -28,5 +28,7 @@ jobs:
       ci_tools_version: v1.4.1
       extension_name: example
       format_checks: 'format;tidy'
+      # musl fails with lapack/fortran even with fortran set (next step)
+      exclude_archs: "linux_amd64_musl"
       # add fortran and omp for armadillo below mlpack
       extra_toolchains: "fortran;omp"    
