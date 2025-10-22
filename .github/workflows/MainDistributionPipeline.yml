@@ -18,7 +18,11 @@ jobs:
     with:
       duckdb_version: v1.4.1
       ci_tools_version: v1.4.1
-      extension_name: example
+      extension_name: mlpack
+      # musl fails with lapack/fortran even with fortran set (next step)
+      # exclude_archs: "linux_amd64_musl"
+      # add fortran and omp for armadillo below mlpack
+      extra_toolchains: "fortran;omp"    
 
   code-quality-check:
     name: Code Quality Check
@@ -26,9 +30,5 @@ jobs:
     with:
       duckdb_version: v1.4.1
       ci_tools_version: v1.4.1
-      extension_name: example
+      extension_name: mlpack
       format_checks: 'format;tidy'
-      # musl fails with lapack/fortran even with fortran set (next step)
-      exclude_archs: "linux_amd64_musl"
-      # add fortran and omp for armadillo below mlpack
-      extra_toolchains: "fortran;omp"    
