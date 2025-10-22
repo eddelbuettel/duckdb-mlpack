@@ -1,6 +1,6 @@
 # name: test/sql/mlpack.test
 # description: test mlpack extension
-# group: [mlpack]
+# group: [sql]
 
 # Before we load the extension, this will fail
 statement error

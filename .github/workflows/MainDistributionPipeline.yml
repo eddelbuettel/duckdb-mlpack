@@ -28,3 +28,5 @@ jobs:
       ci_tools_version: v1.4.1
       extension_name: example
       format_checks: 'format;tidy'
+      # add fortran and omp for armadillo below mlpack
+      extra_toolchains: "fortran;omp"    
