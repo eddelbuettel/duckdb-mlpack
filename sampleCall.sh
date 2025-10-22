@@ -27,9 +27,13 @@ CREATE TABLE Z (name VARCHAR, value VARCHAR);
 INSERT INTO Z VALUES ('intercept', 'true');
 CREATE TABLE M (json VARCHAR);
 
-CREATE TEMP TABLE A AS SELECT * FROM mlpack_linear_regression("X", "Y", "Z", "M");
+CREATE TEMP TABLE A AS SELECT * FROM mlpack_linear_regression_fit("X", "Y", "Z", "M");
 
+SELECT * FROM A;
 SELECT * FROM M;
+
+CREATE TEMP TABLE B AS SELECT * FROM mlpack_linear_regression_pred("X", "M");
+SELECT * FROM B;
 EOF
 }
 

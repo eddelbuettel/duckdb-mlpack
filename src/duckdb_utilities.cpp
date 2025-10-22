@@ -26,11 +26,23 @@ std::map<std::string, std::string> get_parameters(ClientContext &context, std::s
 	return params;
 }
 
-	void store_model(ClientContext &context, std::string model_table, std::string model_as_json) {
+void store_model(ClientContext &context, std::string model_table, std::string model_as_json) {
 	Connection con(*context.db);
-
 	std::string query = std::string("INSERT INTO " + model_table + " VALUES ('" + model_as_json + "');");
 	con.Query(query);
+}
+
+std::string retrieve_model(ClientContext &context, std::string model_table) {
+	Connection con(*context.db);
+	std::string query = std::string("SELECT * FROM " + model_table + ";");
+	auto result = con.Query(query);
+	idx_t n = result->RowCount(), k = result->ColumnCount();
+	assert(n == 1);
+	assert(k == 1);
+	result->Fetch();
+	std::string mod = result->GetValue(0, 0).GetValue<std::string>();
+	//std::cout << "Model: " << mod << std::endl;
+	return mod;
 }
 
 }

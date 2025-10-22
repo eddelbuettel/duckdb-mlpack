@@ -9,8 +9,11 @@
 
 namespace duckdb {
 
+
 std::map<std::string, std::string> get_parameters(ClientContext &context, std::string parameters);
 void store_model(ClientContext &context, std::string model_table, std::string model_as_json);
+std::string retrieve_model(ClientContext &context, std::string model_table);
+
 
 template<typename T>
 arma::Mat<T> get_armadillo_matrix_transposed(ClientContext &context, std::string &table) {
@@ -55,6 +58,14 @@ std::string SerializeObject(T& t) {
 		o(CEREAL_NVP(x));
 	}
 	return oss.str();
+};
+
+template<typename T>
+void UnserializeObject(std::string json, T& t) {
+	std::istringstream iss(json);
+	cereal::JSONInputArchive i(iss);
+	T& x(t);
+	i(CEREAL_NVP(x));
 };
 
 }
