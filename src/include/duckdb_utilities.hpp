@@ -22,10 +22,10 @@ arma::Mat<T> get_armadillo_matrix_transposed(ClientContext &context, std::string
 	auto result = con.Query(query);
 
 	idx_t n = result->RowCount(), k = result->ColumnCount();
-
+	// std::cout << "TOTAL: " << n << " by " << k << std::endl;
 	arma::Mat<T> m(k, n); // transpose while reading, i.e. row i becomes col i
 	idx_t row = 0;
-	while (auto chunk = result->Fetch()) {
+	while (auto chunk = result->Fetch() && row < n) {
 		for (idx_t row_idx = 0; row_idx < n; ++row_idx) {
 			arma::Col<T> r(k);
 			for (idx_t col_idx = 0; col_idx < k; col_idx++) {

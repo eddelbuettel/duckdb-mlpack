@@ -39,7 +39,7 @@ void MlpackLinRegTableFunction(ClientContext &context, TableFunctionInput &data_
 		labelsvec.print("labelsvec");
 	std::map<std::string, std::string> params = get_parameters(context, resdata.parameters);
 
-	const double lambda = params.count("lambda") > 0 ? std::stoi(params["lambda"]) : 0.0;
+	const double lambda = params.count("lambda") > 0 ? std::stod(params["lambda"]) : 0.0;
 	const bool intercept = params.count("intercept") > 0 ? (params["intercept"] == "true" ? true : false) : true;
 	if (verbose) {
 		std::cout << "lambda : " << lambda << std::endl;
