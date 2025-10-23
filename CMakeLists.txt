@@ -34,6 +34,7 @@ string(REGEX REPLACE
     "::template apply" "::apply"
     "" CEREAL_TUPLE "${CEREAL_TUPLE}")
 file(WRITE ${CMAKE_BINARY_DIR}/deps/cereal-1.3.2/include/cereal/types/tuple.hpp "${CEREAL_TUPLE}")
+message(STATUS "${CEREAL_TUPLE}")
 
 set(EXTENSION_NAME ${TARGET_NAME}_extension)
 set(LOADABLE_EXTENSION_NAME ${TARGET_NAME}_loadable_extension)
