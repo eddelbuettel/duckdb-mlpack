@@ -107,14 +107,16 @@ installed,
 
 ## Examples
 
-A script `sampleCall.sh` is included. It accesses data sets regrouped in this repository and
-[described on this page][https://eddelbuettel.github.io/duckdb-mlpack/data/].
+A script `sampleCall.sh` is included and provides several working illustrations. It accesses data
+sets regrouped in this repositorym and [described more fully on this
+page](https://eddelbuettel.github.io/duckdb-mlpack/data/). The script can be adjusted to use the
+repo-local data sets as well, see the comment at the top.
 
 ## TODO
 
 - [Partionally DONE: linear regression] More examples of model fitting and prediction
 - [Partionally DONE] Maybe set up model serialization into table to predict on new data
-- Ideally: Work out how to `SELECT` from multiple tabels
+- Ideally: Work out how to `SELECT` from multiple tables
 - [DONE] Else maybe `SELECT` into temp. tables and pass temp. table names into routine
 - [DONE] Read parameters from auxiliary table
 - ~~Maybe add `mlpack` as a `git submodule`~~ CMake now pulls it in as a dependency 
