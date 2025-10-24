@@ -105,6 +105,10 @@ and after a short little while `build/release/duckdb` should be available. See t
 `duckdb` extensions for more. `mlpack` and its dependencies will also be as needed during the build
 installed,
 
+## Examples
+
+A script `sampleCall.sh` is included. It accesses data sets regrouped in this repository and
+[described on this page][https://eddelbuettel.github.io/duckdb-mlpack/data/].
 
 ## TODO
 

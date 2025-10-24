@@ -31,7 +31,7 @@ tree volume, we really only this as a minimal example.
 
 This well known data set is included in R (see `help(iris)`) and the [UC Irvine data repository for
 machine learning][ucimldata] and is described on [this page][iris] in more detail. We copied the
-[mlpack data][mldata] files that already split into features and labels.
+[mlpack data][mldata] files that already split into features and labels. We use `.csv` for both files.
 
 
 ### Covertype
