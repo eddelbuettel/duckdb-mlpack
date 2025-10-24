@@ -24,17 +24,20 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 # Find OpenMP (and link below)
 find_package(OpenMP REQUIRED)
 
+#find_package(Armadillo CONFIG REQUIRED)
+
 # Find mlpack (and armadillo, ensmallen, cereal, ...)
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMake/mlpack.cmake)
-fetch_mlpack(COMPILE_OPENBLAS TRUE)
+fetch_mlpack(COMPILE_OPENBLAS FALSE)
 
 # We need to patch cereal, a mlpack dependency (cf https://github.com/USCiLab/cereal/pull/835)
 file(READ ${CMAKE_BINARY_DIR}/deps/cereal-1.3.2/include/cereal/types/tuple.hpp CEREAL_TUPLE)
-string(REGEX REPLACE
+string(REPLACE
     "::template apply" "::apply"
-    "" CEREAL_TUPLE "${CEREAL_TUPLE}")
-file(WRITE ${CMAKE_BINARY_DIR}/deps/cereal-1.3.2/include/cereal/types/tuple.hpp "${CEREAL_TUPLE}")
+    CEREAL_TUPLE "${CEREAL_TUPLE}")
+file(WRITE ${CMAKE_BINARY_DIR}/vcpkg_installed/x64-linux/include/cereal/types/tuple.hpp "${CEREAL_TUPLE}")
 message(STATUS "${CEREAL_TUPLE}")
+
 
 set(EXTENSION_NAME ${TARGET_NAME}_extension)
 set(LOADABLE_EXTENSION_NAME ${TARGET_NAME}_loadable_extension)
