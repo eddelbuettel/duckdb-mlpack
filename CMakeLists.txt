@@ -26,7 +26,7 @@ find_package(OpenMP REQUIRED)
 
 # Find mlpack (and armadillo, ensmallen, cereal, ...)
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMake/mlpack.cmake)
-fetch_mlpack(COMPILE_OPENBLAS FALSE)
+fetch_mlpack(COMPILE_OPENBLAS TRUE)
 
 # We need to patch cereal, a mlpack dependency (cf https://github.com/USCiLab/cereal/pull/835)
 file(READ ${CMAKE_BINARY_DIR}/deps/cereal-1.3.2/include/cereal/types/tuple.hpp CEREAL_TUPLE)
