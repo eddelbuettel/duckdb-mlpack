@@ -78,4 +78,55 @@ void MlpackAdaboostTableFunction(ClientContext &context, TableFunctionInput &dat
 	resdata.data_returned = true; // mark that we have been called
 }
 
+unique_ptr<FunctionData> MlpackAdaboostPredTableBind(ClientContext &context, TableFunctionBindInput &input,
+													 vector<LogicalType> &return_types, vector<string> &names) {
+	auto resdata = make_uniq<MlpackModelData>(); // 'resdata' for result data i.e. outgoing
+	resdata->features = input.inputs[0].GetValue<std::string>();
+	resdata->model = input.inputs[1].GetValue<std::string>();
+	names = {"predicted"};
+	return_types = {LogicalType::INTEGER};
+	resdata->return_types = return_types;
+	resdata->names = names;
+	return std::move(resdata);
+}
+
+void MlpackAdaboostPredTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
+	bool verbose = false;
+	auto &resdata = const_cast<MlpackModelData &>(data_p.bind_data->Cast<MlpackModelData>());
+
+	// if we have been called, return nothing
+	if (resdata.data_returned) {
+		output.SetCardinality(0);
+		if (verbose)
+			std::cout << "  done\n";
+		return;
+	}
+
+	// Explanatory variables i.e. 'features'
+	arma::mat dataset = get_armadillo_matrix_transposed<double>(context, resdata.features);
+	if (verbose)
+		dataset.print("dataset");
+
+	auto model = retrieve_model(context, resdata.model);
+	if (verbose)
+		std::cout << model << std::endl;
+
+	using PerceptronType = mlpack::Perceptron<mlpack::SimpleWeightUpdate, mlpack::ZeroInitialization, arma::mat>;
+	mlpack::AdaBoost<PerceptronType, arma::mat> a;
+	UnserializeObject<mlpack::AdaBoost<PerceptronType, arma::mat>>(model, a);
+
+	auto n = dataset.n_cols; // cols not rows because transposed
+	arma::Row<size_t> classifiedvalues(n);
+	a.Classify(dataset, classifiedvalues);
+	if (verbose)
+		classifiedvalues.print("predicted");
+
+	output.SetCardinality(n);
+	for (idx_t i = 0; i < n; i++) {
+		output.data[0].SetValue(i, (int32_t) classifiedvalues[i]);
+	}
+
+	resdata.data_returned = true; // mark that we have been called
+}
+
 } // namespace duckdb

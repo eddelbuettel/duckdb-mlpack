@@ -27,11 +27,15 @@ static void LoadInternal(ExtensionLoader &loader) {
 	    TableFunction("mlpack_table", {LogicalType::INTEGER}, MlpackTableFunction, MlpackTableBind);
 	loader.RegisterFunction(mlpack_sample_table_function);
 
-	// Register adaboost example
-	auto mlpack_adaboost_function = TableFunction(
-	    "mlpack_adaboost", {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
+	// Register adaboost example train and prediction function
+	auto mlpack_adaboost_train_function = TableFunction(
+	    "mlpack_adaboost_train", {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
 	    MlpackAdaboostTableFunction, MlpackAdaboostTableBind);
-	loader.RegisterFunction(mlpack_adaboost_function);
+	loader.RegisterFunction(mlpack_adaboost_train_function);
+	auto mlpack_adaboost_pred_function =
+	    TableFunction("mlpack_adaboost_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
+	                  MlpackAdaboostPredTableFunction, MlpackAdaboostPredTableBind);
+	loader.RegisterFunction(mlpack_adaboost_pred_function);
 
 	// Register linear regression example fit and prediction
 	auto mlpack_linreg_fit_function =
