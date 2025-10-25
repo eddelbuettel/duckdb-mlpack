@@ -79,7 +79,7 @@ void MlpackAdaboostTableFunction(ClientContext &context, TableFunctionInput &dat
 }
 
 unique_ptr<FunctionData> MlpackAdaboostPredTableBind(ClientContext &context, TableFunctionBindInput &input,
-													 vector<LogicalType> &return_types, vector<string> &names) {
+                                                     vector<LogicalType> &return_types, vector<string> &names) {
 	auto resdata = make_uniq<MlpackModelData>(); // 'resdata' for result data i.e. outgoing
 	resdata->features = input.inputs[0].GetValue<std::string>();
 	resdata->model = input.inputs[1].GetValue<std::string>();
@@ -123,7 +123,7 @@ void MlpackAdaboostPredTableFunction(ClientContext &context, TableFunctionInput 
 
 	output.SetCardinality(n);
 	for (idx_t i = 0; i < n; i++) {
-		output.data[0].SetValue(i, (int32_t) classifiedvalues[i]);
+		output.data[0].SetValue(i, (int32_t)classifiedvalues[i]);
 	}
 
 	resdata.data_returned = true; // mark that we have been called
