@@ -51,6 +51,11 @@ void MlpackLinRegTableFunction(ClientContext &context, TableFunctionInput &data_
 		std::cout << SerializeObject<mlpack::LinearRegression<>>(lr) << std::endl;
 	store_model(context, resdata.model, SerializeObject<mlpack::LinearRegression<>>(lr));
 
+	auto avec = lr.Parameters();
+	if (verbose)
+		std::cout << "Coefficients:" << serialize_vector(avec) << std::endl;
+	store_vector(context, resdata.model, "coefficients", serialize_vector(avec));
+
 	auto n = labelsvec.n_elem;
 	arma::rowvec fittedvalues(n);
 	lr.Predict(dataset, fittedvalues);
