@@ -21,34 +21,41 @@ It is currently in 'MVP' status: _minimal_ indeed but also _viable_ as the follo
 
 ## Example
 
-Because table functions in `duckdb` can only use on `select *` query, the following code snippet
-first creates a temporary tables for the two data sets for 'features' and 'labels' (or `X` and `y`
-in more statistical terminology) which are passed a strings to the function and read therein.  It 
-also uses a parameter table `Z` with simply `key: value` notation as variable charater entries. Keys
-corresponding to parameters will override defaults with their given values. Lastly, table `M`
-contains the (JSON-)serialized model one could use for prediction on new data. 
+Because table functions in `duckdb` can only be used on a single `select *` query, the following
+code snippet first creates a temporary tables for the two data sets for 'features' and 'labels' (or
+`X` and `y` in more statistical terminology) which are passed a strings to the function and read
+therein.  It also uses a parameter table `Z` with simply `key: value` notation as variable charater
+entries. Keys corresponding to parameters will override defaults with their given values. Lastly,
+table `M` contains the (JSON-)serialized model one can use for prediction on new data as shown below.
 
 ```sh
 #!/bin/bash
 
 cat <<EOF | build/release/duckdb
+-- this is needed if you test the locally built extension
 SET autoinstall_known_extensions=1;
-SET autoload_known_extensions=1; # for httpfs
-
-CREATE TABLE X AS SELECT * FROM read_csv("https://mlpack.org/datasets/iris.csv");
-CREATE TABLE Y AS SELECT * FROM read_csv("https://mlpack.org/datasets/iris_labels.csv");
+SET autoload_known_extensions=1;
+-- create tables of 'features' and 'labels' followed by override parameters and a model table
+CREATE TABLE X AS SELECT * FROM read_csv("https://eddelbuettel.github.io/duckdb-mlpack/data/iris.csv");
+CREATE TABLE Y AS SELECT * FROM read_csv("https://eddelbuettel.github.io/duckdb-mlpack/data/iris_labels.csv");
 CREATE TABLE Z (name VARCHAR, value VARCHAR);
-INSERT INTO Z VALUES ('iterations', '150'), ('tolerance', '1e-8'), ('verbose', 'true');
+INSERT INTO Z VALUES ('iterations', '50'), ('tolerance', '1e-7'), ('verbose', 'true');
 CREATE TABLE M (json VARCHAR);
 
-CREATE TEMP TABLE A AS SELECT * FROM mlpack_adaboost("X", "Y", "Z", "M");
+-- train model off 'X' to predict 'Y' using (non-default) parameters in 'Z'
+-- serialize model (in JSON) to table 'M'
+CREATE TEMP TABLE A AS SELECT * FROM mlpack_adaboost_train("X", "Y", "Z", "M");
 
+-- classification summary of count per group
 SELECT COUNT(*) as n, predicted FROM A GROUP BY predicted;
 
-DROP TABLE X;
-DROP TABLE Y;
-DROP TABLE Z;
-DROP TABLE M;
+-- Model 'M' can be used to predict on new data so creating 'N'
+CREATE TABLE N (x1 DOUBLE, x2 DOUBLE, x3 DOUBLE, x4 DOUBLE);
+-- inserting approximate column mean values, min values, max values
+INSERT INTO N VALUES (5.843, 3.054, 3.759, 1.199), (4.3, 2.0, 1.0, 0.1), (7.9, 4.4, 6.9, 2.5);
+-- and this predict one element each
+SELECT * FROM mlpack_adaboost_pred("N", "M");
+
 EOF
 ```
 
@@ -71,6 +78,14 @@ Misclassified: 1
 │    49 │         1 │
 │    51 │         2 │
 └───────┴───────────┘
+┌───────────┐
+│ predicted │
+│   int32   │
+├───────────┤
+│         1 │
+│         0 │
+│         2 │
+└───────────┘
 $   
 ```
 
@@ -89,7 +104,21 @@ entry (when predicting the on training data -- the example here is _minimal_):
 >
 ```
 
+A second example support (regularized) linear regression with prediction.
+
 ## Installation
+
+### From the duckdb community extension
+
+This is currently supported on Linux only, adding macOS should be easy once we take care of a small
+and known pothole related to the `cereal` library build under newer compilers.
+
+```sql
+D install mlpack from community;   # once per duckdb version use
+D load mlpack;                     # once per session
+```
+
+### From Source
 
 Requirements should be the same as for `duckdb` and `mlpack`: a recent compiler, and for the latter
 also a local Armadillo installation as we have not told `cmake` yet to install Armadillo if not
@@ -115,15 +144,16 @@ repo-local data sets as well, see the comment at the top.
 ## TODO
 
 - [Partionally DONE: linear regression] More examples of model fitting and prediction
-- [Partionally DONE] Maybe set up model serialization into table to predict on new data
+- [DONE] Maybe set up model serialization into table to predict on new data
 - Ideally: Work out how to `SELECT` from multiple tables
 - [DONE] Else maybe `SELECT` into temp. tables and pass temp. table names into routine
 - [DONE] Read parameters from auxiliary table
 - ~~Maybe add `mlpack` as a `git submodule`~~ CMake now pulls it in as a dependency 
+- [DONE] Submit as duckdb community extension
 
 ## Acknowledgements
 
-Ryan Curtin has been very helpful during design discussions and with endless CMake tips.
+Ryan Curtin has been very helpful for design discussions and with endless CMake tips and tricks.
 
 ## Author
 
