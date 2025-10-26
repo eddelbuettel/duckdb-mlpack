@@ -42,7 +42,8 @@ void MlpackAdaboostTableFunction(ClientContext &context, TableFunctionInput &dat
 	if (verbose)
 		dataset.print("dataset");
 	// Dependent variable i.e. 'labels'
-	arma::Row<size_t> labelsvec = get_armadillo_row<size_t>(context, resdata.labels);
+	arma::Row<double> labelsvecdbl = get_armadillo_row<double>(context, resdata.labels);
+	arma::Row<size_t> labelsvec = arma::conv_to<arma::Row<size_t>>::from(labelsvecdbl);
 	if (arma::min(labelsvec) != 0)
 		labelsvec = labelsvec - 1;
 	if (verbose)
