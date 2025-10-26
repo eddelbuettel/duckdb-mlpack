@@ -407,7 +407,8 @@ macro(find_cereal)
           "::template apply" "::apply"
           CEREAL_TUPLE "${CEREAL_TUPLE}")
       file(WRITE ${CEREAL_INCLUDE_DIR}/cereal/types/tuple.hpp "${CEREAL_TUPLE}")
-      message(STATUS "${CEREAL_TUPLE}")
+      #message(STATUS "${CEREAL_TUPLE}")
+      message(STATUS "Patched cereal include file 'tuple.hpp'")
 
     elseif (EXISTS "${CEREAL_INCLUDE_DIR}/cereal/details/polymorphic_impl_fwd.hpp")
 
