@@ -402,6 +402,14 @@ macro(find_cereal)
       string(REGEX REPLACE ".*#define CEREAL_VERSION_PATCH ([0-9]+).*" "\\1"
           CEREAL_VERSION_PATCH "${_CEREAL_HEADER_CONTENTS}")
 
+      file(READ ${CEREAL_INCLUDE_DIR}/cereal/types/tuple.hpp CEREAL_TUPLE)
+      string(REPLACE
+          "::template apply" "::apply"
+          CEREAL_TUPLE "${CEREAL_TUPLE}")
+      file(WRITE ${CEREAL_INCLUDE_DIR}/cereal/types/tuple.hpp "${CEREAL_TUPLE}")
+      #message(STATUS "${CEREAL_TUPLE}")
+      message(STATUS "Patched cereal include file 'tuple.hpp'")
+
     elseif (EXISTS "${CEREAL_INCLUDE_DIR}/cereal/details/polymorphic_impl_fwd.hpp")
 
       set(CEREAL_VERSION_MAJOR 1)
@@ -414,12 +422,12 @@ macro(find_cereal)
       set(CEREAL_VERSION_PATCH 2)
     elseif (EXISTS "${CEREAL_INCLUDE_DIR}/cereal/cereal.hpp")
 
-    set(CEREAL_VERSION_MAJOR 1)
-    set(CEREAL_VERSION_MINOR 1)
-    set(CEREAL_VERSION_PATCH 1)
-  else()
+      set(CEREAL_VERSION_MAJOR 1)
+      set(CEREAL_VERSION_MINOR 1)
+      set(CEREAL_VERSION_PATCH 1)
+    else()
 
-    set(CEREAL_FOUND NO)
+      set(CEREAL_FOUND NO)
     endif()
     set(CEREAL_VERSION_STRING "${CEREAL_VERSION_MAJOR}.${CEREAL_VERSION_MINOR}.${CEREAL_VERSION_PATCH}")
   endif ()
