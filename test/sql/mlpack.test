@@ -44,10 +44,10 @@ statement ok
 CREATE TABLE Z (name VARCHAR, value VARCHAR);
 
 statement ok
-INSERT INTO Z VALUES ('iterations', '50'), ('tolerance', '1e-7'), ('verbose', 'false');
+INSERT INTO Z VALUES ('iterations', '50'), ('tolerance', '1e-7'), ('silent', 'true');
 
 statement ok
-CREATE TABLE M (json VARCHAR);
+CREATE TABLE M (key VARCHAR, json VARCHAR);
 
 statement ok
 CREATE TEMP TABLE A AS SELECT * FROM mlpack_adaboost_train("X", "Y", "Z", "M");
@@ -68,9 +68,17 @@ INSERT INTO N VALUES (5.843, 3.054, 3.759, 1.199), (4.3, 2.0, 1.0, 0.1), (7.9, 4
 statement ok
 CREATE TEMP TABLE B AS SELECT * FROM mlpack_adaboost_pred("N", "M");
 
+query I
+SELECT * FROM B;
+----
+1
+0
+2
+
 query II
 SELECT COUNT(*) as n, predicted FROM B GROUP BY predicted;
 ----
 1	0
 1	1
 1	2
+

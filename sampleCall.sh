@@ -23,7 +23,7 @@ CREATE TABLE X AS SELECT * FROM read_csv("https://eddelbuettel.github.io/duckdb-
 CREATE TABLE Y AS SELECT * FROM read_csv("https://eddelbuettel.github.io/duckdb-mlpack/data/iris_labels.csv");
 CREATE TABLE Z (name VARCHAR, value VARCHAR);
 INSERT INTO Z VALUES ('iterations', '50'), ('tolerance', '1e-7'), ('verbose', 'true');
-CREATE TABLE M (json VARCHAR);
+CREATE TABLE M (key VARCHAR, json VARCHAR);
 
 -- train model off 'X' to predict 'Y' using (non-default) parameters in 'Z'
 -- serialize model (in JSON) to table 'M'
@@ -50,28 +50,22 @@ CREATE TABLE X AS SELECT * FROM read_csv("https://eddelbuettel.github.io/duckdb-
 CREATE TABLE Y AS SELECT * FROM read_csv("https://eddelbuettel.github.io/duckdb-mlpack/data/trees_y.csv");
 CREATE TABLE Z (name VARCHAR, value VARCHAR);
 INSERT INTO Z VALUES ('intercept', 'true');
-CREATE TABLE M (json VARCHAR);
+CREATE TABLE M (key VARCHAR, json VARCHAR);
 
-CREATE TABLE A AS SELECT * FROM mlpack_linear_regression_fit("X", "Y", "Z", "M");
+SELECT * FROM mlpack_linear_regression_fit("X", "Y", "Z", "M");
 
-## Checks
-SELECT * FROM A;
-#SELECT * FROM M;
-
-## For simplicity re-fit from given data
-#SELECT * FROM (SELECT * FROM mlpack_linear_regression_pred("X", "M"));
+SELECT * FROM M WHERE key = 'coefficients';
 
 ## Create a quick new data table with arbitrary values and compute prediction on new data
-## This replicates what we
-#CREATE TABLE N (x1 DOUBLE, x2 DOUBLE);
-#INSERT INTO N VALUES ('1', '1'), ('2', '-1'), ('3', '1');
-#SELECT * FROM (SELECT * FROM mlpack_linear_regression_pred("N", "M"));
+## This replicates what we see in R with these values
+CREATE TABLE N (x1 DOUBLE, x2 DOUBLE);
+INSERT INTO N VALUES ('1', '1'), ('2', '-1'), ('3', '1');
+SELECT * FROM mlpack_linear_regression_pred("N", "M");
 
-#DROP TABLE X;
-#DROP TABLE Y;
-#DROP TABLE Z;
-#DROP TABLE A;
-#DROP TABLE M;
+DROP TABLE X;
+DROP TABLE Y;
+DROP TABLE Z;
+DROP TABLE M;
 
 EOF
 }
@@ -84,10 +78,10 @@ CREATE TABLE X AS SELECT * FROM read_csv("https://eddelbuettel.github.io/duckdb-
 CREATE TABLE Y AS SELECT * FROM read_csv("https://eddelbuettel.github.io/duckdb-mlpack/data//covertype_small_labels.csv.gz");
 CREATE TABLE Z (name VARCHAR, value VARCHAR);
 INSERT INTO Z VALUES ('intercept', 'false'), ('lambda', '0.05');
-CREATE TABLE M (json VARCHAR);
+CREATE TABLE M (key VARCHAR, json VARCHAR);
 
 CREATE TEMP TABLE A AS SELECT * FROM mlpack_linear_regression_fit("X", "Y", "Z", "M");
-SELECT * FROM M;
+SELECT * FROM M WHERE key = 'coefficients';
 
 EOF
 }

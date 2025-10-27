@@ -58,7 +58,6 @@ void MlpackAdaboostTableFunction(ClientContext &context, TableFunctionInput &dat
 	const int perceptronIter = params.count("perceptronIter") > 0 ? std::stoi(params["perceptronIter"]) : 400;
 	const bool silent = params.count("silent") > 0 ? (params["silent"] == "true" ? true : false) : false;
 
-
 	double ztProduct = a.Train(dataset, labelsvec, numClasses, iterations, tolerance, perceptronIter);
 
 	if (verbose)
