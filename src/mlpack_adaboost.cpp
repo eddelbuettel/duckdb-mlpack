@@ -56,6 +56,8 @@ void MlpackAdaboostTableFunction(ClientContext &context, TableFunctionInput &dat
 	const int iterations = params.count("iterations") > 0 ? std::stoi(params["iterations"]) : 100;
 	const double tolerance = params.count("tolerance") > 0 ? std::stod(params["tolerance"]) : 2e-10;
 	const int perceptronIter = params.count("perceptronIter") > 0 ? std::stoi(params["perceptronIter"]) : 400;
+	const bool silent = params.count("silent") > 0 ? (params["silent"] == "true" ? true : false) : false;
+
 
 	double ztProduct = a.Train(dataset, labelsvec, numClasses, iterations, tolerance, perceptronIter);
 
@@ -68,7 +70,8 @@ void MlpackAdaboostTableFunction(ClientContext &context, TableFunctionInput &dat
 	if (verbose)
 		predictedLabels.print("predicted");
 	size_t countError = arma::accu(labelsvec != predictedLabels);
-	std::cout << "Misclassified: " << countError << std::endl;
+	if (!silent)
+		std::cout << "Misclassified: " << countError << std::endl;
 
 	auto n = predictedLabels.n_elem;
 	output.SetCardinality(n);
