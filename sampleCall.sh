@@ -22,7 +22,7 @@ SET autoload_known_extensions=1;
 CREATE TABLE X AS SELECT * FROM read_csv("https://eddelbuettel.github.io/duckdb-mlpack/data/iris.csv");
 CREATE TABLE Y AS SELECT * FROM read_csv("https://eddelbuettel.github.io/duckdb-mlpack/data/iris_labels.csv");
 CREATE TABLE Z (name VARCHAR, value VARCHAR);
-INSERT INTO Z VALUES ('iterations', '50'), ('tolerance', '1e-7'), ('verbose', 'true');
+INSERT INTO Z VALUES ('iterations', '50'), ('tolerance', '1e-7'), ('silent', 'true');
 CREATE TABLE M (key VARCHAR, json VARCHAR);
 
 -- train model off 'X' to predict 'Y' using (non-default) parameters in 'Z'
@@ -87,5 +87,5 @@ EOF
 }
 
 adaboost
-#linear_regression
-#linear_regression_larger
+linear_regression
+linear_regression_larger

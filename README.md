@@ -26,12 +26,12 @@ code snippet first creates a temporary tables for the two data sets for 'feature
 `X` and `y` in more statistical terminology) which are passed a strings to the function and read
 therein.  It also uses a parameter table `Z` with simply `key: value` notation as variable charater
 entries. Keys corresponding to parameters will override defaults with their given values. Lastly,
-table `M` contains the (JSON-)serialized model one can use for prediction on new data as shown below.
+table `M` contains the (JSON-)serialized model one can use for prediction on new data as shown
+below. (In the linear regression example, `M` also contains a second row of just the estimated model
+coefficients for easier access.)
 
-```sh
-#!/bin/bash
 
-cat <<EOF | build/release/duckdb
+```sql
 -- this is needed if you test the locally built extension
 SET autoinstall_known_extensions=1;
 SET autoload_known_extensions=1;
@@ -40,7 +40,7 @@ CREATE TABLE X AS SELECT * FROM read_csv("https://eddelbuettel.github.io/duckdb-
 CREATE TABLE Y AS SELECT * FROM read_csv("https://eddelbuettel.github.io/duckdb-mlpack/data/iris_labels.csv");
 CREATE TABLE Z (name VARCHAR, value VARCHAR);
 INSERT INTO Z VALUES ('iterations', '50'), ('tolerance', '1e-7'), ('verbose', 'true');
-CREATE TABLE M (json VARCHAR);
+CREATE TABLE M (key VARCHAR, json VARCHAR);
 
 -- train model off 'X' to predict 'Y' using (non-default) parameters in 'Z'
 -- serialize model (in JSON) to table 'M'
@@ -55,8 +55,6 @@ CREATE TABLE N (x1 DOUBLE, x2 DOUBLE, x3 DOUBLE, x4 DOUBLE);
 INSERT INTO N VALUES (5.843, 3.054, 3.759, 1.199), (4.3, 2.0, 1.0, 0.1), (7.9, 4.4, 6.9, 2.5);
 -- and this predict one element each
 SELECT * FROM mlpack_adaboost_pred("N", "M");
-
-EOF
 ```
 
 Note also how we take advantage of the remote `httpfs` reader in `duckdb`; we could equally well
@@ -143,13 +141,14 @@ repo-local data sets as well, see the comment at the top.
 
 ## TODO
 
-- [Partionally DONE: linear regression] More examples of model fitting and prediction
+- [Partly DONE: linear regression] More examples of model fitting and prediction
 - [DONE] Maybe set up model serialization into table to predict on new data
 - Ideally: Work out how to `SELECT` from multiple tables
 - [DONE] Else maybe `SELECT` into temp. tables and pass temp. table names into routine
 - [DONE] Read parameters from auxiliary table
 - ~~Maybe add `mlpack` as a `git submodule`~~ CMake now pulls it in as a dependency 
 - [DONE] Submit as duckdb community extension
+- [DONE] Add unit tests
 
 ## Acknowledgements
 
