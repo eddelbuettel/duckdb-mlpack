@@ -48,7 +48,6 @@ include_directories(${MLPACK_INCLUDE_DIRS})
 
 set(EXTENSION_SOURCES
     src/duckdb_utilities.cpp
-    src/mlpack_table_function.cpp
     src/mlpack_adaboost.cpp
     src/mlpack_linear_regression.cpp
     src/mlpack_extension.cpp

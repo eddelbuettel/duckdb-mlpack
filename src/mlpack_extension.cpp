@@ -2,7 +2,6 @@
 
 #include "mlpack_extension.hpp"
 
-#include "mlpack_table_function.hpp"
 #include "mlpack_adaboost.hpp"
 #include "mlpack_linear_regression.hpp"
 
@@ -21,11 +20,6 @@ namespace duckdb {
 static void LoadInternal(ExtensionLoader &loader) {
 	auto &dbinstance = loader.GetDatabaseInstance();
 	Connection con(dbinstance);
-
-	// Register sample table function returning a table (and consuming a scalar (or two, commented out)
-	auto mlpack_sample_table_function =
-	    TableFunction("mlpack_table", {LogicalType::INTEGER}, MlpackTableFunction, MlpackTableBind);
-	loader.RegisterFunction(mlpack_sample_table_function);
 
 	// Register adaboost example train and prediction function
 	auto mlpack_adaboost_train_function =
