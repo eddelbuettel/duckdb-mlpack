@@ -4,6 +4,9 @@
 
 require mlpack
 
+statement ok
+PRAGMA enable_verification
+
 # check mlpack_adaboost
 # running commands from sampleCall.sh 
 
@@ -28,13 +31,8 @@ SELECT * FROM mlpack_linear_regression_fit("X", "Y", "Z", "M");
 statement ok
 SELECT * FROM M WHERE key = 'coefficients';
 
-# -- cannot get json loaded for tests
-#query I
-#SELECT unnest( json_extract( json, '$.parameters[*]'))::FLOAT AS parameters FROM M WHERE key = 'coefficients';
-#----
-#1
-#2
-#3
+# NB we declared 'json' as a dependency in 'extension_config.cmake'
+require json
 
 statement ok
 CREATE TABLE N (x1 DOUBLE, x2 DOUBLE);
@@ -51,3 +49,14 @@ SELECT * FROM mlpack_linear_regression_pred("N", "M");
 -3.531843882442646
 -3.7834406384184
 0.43345593812695693
+
+# NB we declare 'json' as a dependency in 'extension_config.cmake' so it should be present
+# The require will result in skipping the remainder where json may be unavailable 
+require json
+
+query I
+SELECT unnest( json_extract( json, '$.parameters[*]'))::FLOAT AS parameters FROM M WHERE key = 'coefficients' LIMIT 3;
+----
+-6.631617
+1.9826499
+1.1171234
