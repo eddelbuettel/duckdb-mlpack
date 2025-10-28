@@ -108,8 +108,7 @@ A second example support (regularized) linear regression with prediction.
 
 ### From the duckdb community extension
 
-This is currently supported on Linux only, adding macOS should be easy once we take care of a small
-and known pothole related to the `cereal` library build under newer compilers.
+This is currently supported on Linux and macOS. It should be possible to add wasm and windows.
 
 ```sql
 D install mlpack from community;   # once per duckdb version use

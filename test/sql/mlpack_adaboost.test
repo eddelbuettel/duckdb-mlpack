@@ -4,6 +4,9 @@
 
 require mlpack
 
+statement ok
+PRAGMA enable_verification
+
 # check mlpack_adaboost
 # running commands from sampleCall.sh 
 statement ok
