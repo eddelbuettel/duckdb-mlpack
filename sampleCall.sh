@@ -44,6 +44,7 @@ EOF
 
 function linear_regression {
     cat <<EOF | build/release/duckdb
+-- this is needed if you test the locally built extension
 SET autoinstall_known_extensions=1;
 SET autoload_known_extensions=1;
 CREATE TABLE X AS SELECT * FROM read_csv("https://eddelbuettel.github.io/duckdb-mlpack/data/trees_x.csv");
@@ -72,6 +73,7 @@ EOF
 
 function linear_regression_larger {
     cat <<EOF | build/release/duckdb
+-- this is needed if you test the locally built extension
 SET autoinstall_known_extensions=1;
 SET autoload_known_extensions=1;
 CREATE TABLE X AS SELECT * FROM read_csv("https://eddelbuettel.github.io/duckdb-mlpack/data/covertype_small_features.csv.gz");
@@ -83,9 +85,14 @@ CREATE TABLE M (key VARCHAR, json VARCHAR);
 CREATE TEMP TABLE A AS SELECT * FROM mlpack_linear_regression_fit("X", "Y", "Z", "M");
 SELECT * FROM M WHERE key = 'coefficients';
 
+DROP TABLE X;
+DROP TABLE Y;
+DROP TABLE Z;
+DROP TABLE M;
+
 EOF
 }
 
 adaboost
-linear_regression
-linear_regression_larger
+#linear_regression
+#linear_regression_larger

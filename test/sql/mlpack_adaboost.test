@@ -1,0 +1,56 @@
+# name: test/sql/mlpack_adaboost.test
+# description: test adaboost in mlpack extension
+# group: [sql]
+
+require mlpack
+
+# check mlpack_adaboost
+# running commands from sampleCall.sh 
+statement ok
+CREATE TABLE X AS SELECT * FROM read_csv("docs/data/iris.csv");
+
+statement ok
+CREATE TABLE Y AS SELECT * FROM read_csv("docs/data/iris_labels.csv");
+
+statement ok
+CREATE TABLE Z (name VARCHAR, value VARCHAR);
+
+statement ok
+INSERT INTO Z VALUES ('iterations', '50'), ('tolerance', '1e-7'), ('silent', 'true');
+
+statement ok
+CREATE TABLE M (key VARCHAR, json VARCHAR);
+
+statement ok
+CREATE TEMP TABLE A AS SELECT * FROM mlpack_adaboost_train("X", "Y", "Z", "M");
+
+query II
+SELECT COUNT(*) as n, predicted FROM A GROUP BY predicted;
+----
+50	0
+49	1
+51	2
+
+statement ok
+CREATE TABLE N (x1 DOUBLE, x2 DOUBLE, x3 DOUBLE, x4 DOUBLE);
+
+statement ok
+INSERT INTO N VALUES (5.843, 3.054, 3.759, 1.199), (4.3, 2.0, 1.0, 0.1), (7.9, 4.4, 6.9, 2.5);
+
+statement ok
+CREATE TEMP TABLE B AS SELECT * FROM mlpack_adaboost_pred("N", "M");
+
+query I
+SELECT * FROM B;
+----
+1
+0
+2
+
+query II
+SELECT COUNT(*) as n, predicted FROM B GROUP BY predicted;
+----
+1	0
+1	1
+1	2
+

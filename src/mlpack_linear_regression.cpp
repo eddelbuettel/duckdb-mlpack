@@ -41,10 +41,7 @@ void MlpackLinRegTableFunction(ClientContext &context, TableFunctionInput &data_
 
 	const double lambda = params.count("lambda") > 0 ? std::stod(params["lambda"]) : 0.0;
 	const bool intercept = params.count("intercept") > 0 ? (params["intercept"] == "true" ? true : false) : true;
-	if (verbose) {
-		std::cout << "lambda : " << lambda << std::endl;
-		std::cout << "intercept : " << (intercept ? "yes" : "no") << std::endl;
-	}
+	const bool silent = params.count("silent") > 0 ? (params["silent"] == "true" ? true : false) : false;
 	mlpack::LinearRegression lr(dataset, labelsvec, lambda, intercept);
 
 	if (verbose)
@@ -62,7 +59,8 @@ void MlpackLinRegTableFunction(ClientContext &context, TableFunctionInput &data_
 	if (verbose)
 		fittedvalues.print("fitted");
 	auto rmse = std::sqrt(arma::as_scalar(arma::mean(arma::square(labelsvec - fittedvalues))));
-	std::cout << "RMSE: " << rmse << std::endl;
+	if (!silent)
+		std::cout << "RMSE: " << rmse << std::endl;
 
 	output.SetCardinality(n);
 	for (idx_t i = 0; i < n; i++) {
