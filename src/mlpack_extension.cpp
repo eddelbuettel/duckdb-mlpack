@@ -44,7 +44,7 @@ static void LoadInternal(ExtensionLoader &loader) {
 	                  MlpackLinRegPredTableFunction, MlpackLinRegPredTableBind);
 	loader.RegisterFunction(mlpack_linreg_pred_function);
 
-	// Register logsitic regression example fit and prediction
+	// Register logistic regression example fit and prediction
 	auto mlpack_logisticreg_fit_function =
 	    TableFunction("mlpack_logistic_regression_fit",
 	                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},

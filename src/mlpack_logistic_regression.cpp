@@ -59,7 +59,7 @@ void MlpackLogisticRegTableFunction(ClientContext &context, TableFunctionInput &
 
 	if (verbose) {
 		predictions.print("predictions");
-		probabilities.print("probabilties");
+		probabilities.print("probabilities");
 	}
 	size_t countError = arma::accu(labelsvec != predictions);
 	if (!silent)
@@ -113,7 +113,7 @@ void MlpackLogisticRegPredTableFunction(ClientContext &context, TableFunctionInp
 	lr.Classify(dataset, predictions, probabilities);
 	if (verbose) {
 		predictions.print("predictions");
-		probabilities.print("probabilties");
+		probabilities.print("probabilities");
 	}
 
 	auto n = predictions.n_elem;
