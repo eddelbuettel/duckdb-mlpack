@@ -102,7 +102,8 @@ entry (when predicting the on training data -- the example here is _minimal_):
 >
 ```
 
-A second example support (regularized) linear regression with prediction.
+A second and third example support, respectively, (regularized) linear regression with prediction
+and (regularized) logistic regression with prediction.
 
 ## Installation
 
@@ -140,7 +141,7 @@ repo-local data sets as well, see the comment at the top.
 
 ## TODO
 
-- [Partly DONE: linear regression] More examples of model fitting and prediction
+- [Partly DONE: linear regression, logistic regression] More examples of model fitting and prediction
 - [DONE] Maybe set up model serialization into table to predict on new data
 - Ideally: Work out how to `SELECT` from multiple tables
 - [DONE] Else maybe `SELECT` into temp. tables and pass temp. table names into routine
