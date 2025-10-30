@@ -54,7 +54,6 @@ static void LoadInternal(ExtensionLoader &loader) {
 	    TableFunction("mlpack_logistic_regression_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
 	                  MlpackLogisticRegPredTableFunction, MlpackLogisticRegPredTableBind);
 	loader.RegisterFunction(mlpack_logisticreg_pred_function);
-
 }
 
 void MlpackExtension::Load(ExtensionLoader &loader) {
