@@ -4,6 +4,7 @@
 
 #include "mlpack_adaboost.hpp"
 #include "mlpack_linear_regression.hpp"
+#include "mlpack_logistic_regression.hpp"
 
 #include <duckdb.hpp>
 #include <duckdb/common/exception.hpp>
@@ -42,6 +43,17 @@ static void LoadInternal(ExtensionLoader &loader) {
 	    TableFunction("mlpack_linear_regression_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
 	                  MlpackLinRegPredTableFunction, MlpackLinRegPredTableBind);
 	loader.RegisterFunction(mlpack_linreg_pred_function);
+
+	// Register logistic regression example fit and prediction
+	auto mlpack_logisticreg_fit_function =
+	    TableFunction("mlpack_logistic_regression_fit",
+	                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
+	                  MlpackLogisticRegTableFunction, MlpackLogisticRegTableBind);
+	loader.RegisterFunction(mlpack_logisticreg_fit_function);
+	auto mlpack_logisticreg_pred_function =
+	    TableFunction("mlpack_logistic_regression_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
+	                  MlpackLogisticRegPredTableFunction, MlpackLogisticRegPredTableBind);
+	loader.RegisterFunction(mlpack_logisticreg_pred_function);
 }
 
 void MlpackExtension::Load(ExtensionLoader &loader) {

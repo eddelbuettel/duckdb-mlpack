@@ -50,6 +50,7 @@ set(EXTENSION_SOURCES
     src/duckdb_utilities.cpp
     src/mlpack_adaboost.cpp
     src/mlpack_linear_regression.cpp
+    src/mlpack_logistic_regression.cpp
     src/mlpack_extension.cpp
 )
 
