@@ -29,8 +29,9 @@ void MlpackLogisticRegTableFunction(ClientContext &context, TableFunctionInput &
 
 	// Explanatory variables i.e. 'features'
 	arma::mat dataset = get_armadillo_matrix_transposed<double>(context, resdata.features);
-	// Dependent variable i.e. 'labels'
-	arma::Row<size_t> labelsvec = get_armadillo_row<size_t>(context, resdata.labels);
+	// Dependent variable i.e. 'labels' (as double because of macos arm64 linker)
+	arma::Row<double> labelsvecdbl = get_armadillo_row<double>(context, resdata.labels);
+	arma::Row<size_t> labelsvec = arma::conv_to<arma::Row<size_t>>::from(labelsvecdbl);
 	std::map<std::string, std::string> params = get_parameters(context, resdata.parameters);
 
 	const double lambda = params.count("lambda") > 0 ? std::stod(params["lambda"]) : 0.0;
