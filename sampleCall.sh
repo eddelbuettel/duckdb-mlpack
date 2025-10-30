@@ -93,6 +93,30 @@ DROP TABLE M;
 EOF
 }
 
-adaboost
+function logistic_regression {
+    cat <<EOF | build/release/duckdb
+SET autoinstall_known_extensions=1;
+SET autoload_known_extensions=1;
+CREATE TABLE X AS SELECT * FROM read_csv("https://eddelbuettel.github.io/duckdb-mlpack/data/logistic_x.csv");
+CREATE TABLE Y AS SELECT * FROM read_csv("https://eddelbuettel.github.io/duckdb-mlpack/data/logistic_y.csv");
+CREATE TABLE Z (name VARCHAR, value VARCHAR);
+INSERT INTO Z VALUES ('silent', 'false');
+CREATE TABLE M (key VARCHAR, json VARCHAR);
+
+CREATE TEMP TABLE A AS SELECT * FROM mlpack_logistic_regression_fit("X", "Y", "Z", "M");
+
+SELECT * FROM A;
+#SELECT * FROM M;
+#SELECT json_extract(json, '$.parameters') FROM M WHERE key = 'coefficients';
+SELECT unnest( json_extract( json, '$.parameters[*]'))::FLOAT AS parameters FROM M WHERE key = 'coefficients';
+
+CREATE TEMP TABLE B AS SELECT * FROM mlpack_logistic_regression_pred("X", "M");
+SELECT * FROM B;
+
+EOF
+}
+
+#adaboost
 #linear_regression
 #linear_regression_larger
+logistic_regression
