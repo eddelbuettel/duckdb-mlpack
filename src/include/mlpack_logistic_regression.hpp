@@ -8,8 +8,8 @@
 
 namespace duckdb {
 
-void MlpackLogisticRegTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output);
+void MlpackLogisticRegressionTrainTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output);
 
-void MlpackLogisticRegPredTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output);
+void MlpackLogisticRegressionPredictTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output);
 
 } // namespace duckdb

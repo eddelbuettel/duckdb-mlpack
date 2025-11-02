@@ -3,7 +3,7 @@
 
 namespace duckdb {
 
-void MlpackLogisticRegTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
+void MlpackLogisticRegressionTrainTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
 	bool verbose = false;
 	auto &resdata = const_cast<MlpackModelData &>(data_p.bind_data->Cast<MlpackModelData>());
 
@@ -60,7 +60,7 @@ void MlpackLogisticRegTableFunction(ClientContext &context, TableFunctionInput &
 	resdata.data_returned = true; // mark that we have been called
 }
 
-void MlpackLogisticRegPredTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
+void MlpackLogisticRegressionPredictTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
 	bool verbose = false;
 	auto &resdata = const_cast<MlpackModelData &>(data_p.bind_data->Cast<MlpackModelData>());
 

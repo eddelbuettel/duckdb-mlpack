@@ -27,33 +27,33 @@ static void LoadInternal(ExtensionLoader &loader) {
 	auto mlpack_adaboost_train_function =
 	    TableFunction("mlpack_adaboost_train",
 	                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
-	                  MlpackAdaboostTableFunction, MlpackTrainTableBindInt);
+	                  MlpackAdaboostTrainTableFunction, MlpackTrainTableBindInt);
 	loader.RegisterFunction(mlpack_adaboost_train_function);
 	auto mlpack_adaboost_pred_function =
 	    TableFunction("mlpack_adaboost_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
-	                  MlpackAdaboostPredTableFunction, MlpackPredictTableBindInt);
+	                  MlpackAdaboostPredictTableFunction, MlpackPredictTableBindInt);
 	loader.RegisterFunction(mlpack_adaboost_pred_function);
 
 	// Register linear regression example fit and prediction
 	auto mlpack_linreg_fit_function =
 	    TableFunction("mlpack_linear_regression_fit",
 	                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
-	                  MlpackLinRegTableFunction, MlpackLinRegTableBind);
+	                  MlpackLinearRegressionTrainTableFunction, MlpackLinRegTableBind);
 	loader.RegisterFunction(mlpack_linreg_fit_function);
 	auto mlpack_linreg_pred_function =
 	    TableFunction("mlpack_linear_regression_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
-	                  MlpackLinRegPredTableFunction, MlpackLinRegPredTableBind);
+	                  MlpackLinearRegressionPredictTableFunction, MlpackLinRegPredTableBind);
 	loader.RegisterFunction(mlpack_linreg_pred_function);
 
 	// Register logistic regression example fit and prediction
 	auto mlpack_logisticreg_fit_function =
 	    TableFunction("mlpack_logistic_regression_fit",
 	                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
-	                  MlpackLogisticRegTableFunction, MlpackTrainTableBindInt);
+	                  MlpackLogisticRegressionTrainTableFunction, MlpackTrainTableBindInt);
 	loader.RegisterFunction(mlpack_logisticreg_fit_function);
 	auto mlpack_logisticreg_pred_function =
 	    TableFunction("mlpack_logistic_regression_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
-	                  MlpackLogisticRegPredTableFunction, MlpackPredictTableBindInt);
+	                  MlpackLogisticRegressionPredictTableFunction, MlpackPredictTableBindInt);
 	loader.RegisterFunction(mlpack_logisticreg_pred_function);
 }
 

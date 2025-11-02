@@ -17,7 +17,7 @@ unique_ptr<FunctionData> MlpackLinRegTableBind(ClientContext &context, TableFunc
 	return std::move(resdata);
 }
 
-void MlpackLinRegTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
+void MlpackLinearRegressionTrainTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
 	bool verbose = false;
 	auto &resdata = const_cast<MlpackModelData &>(data_p.bind_data->Cast<MlpackModelData>());
 
@@ -82,7 +82,7 @@ unique_ptr<FunctionData> MlpackLinRegPredTableBind(ClientContext &context, Table
 	return std::move(resdata);
 }
 
-void MlpackLinRegPredTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
+void MlpackLinearRegressionPredictTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
 	bool verbose = false;
 	auto &resdata = const_cast<MlpackModelData &>(data_p.bind_data->Cast<MlpackModelData>());
 

@@ -10,10 +10,10 @@ namespace duckdb {
 
 unique_ptr<FunctionData> MlpackLinRegTableBind(ClientContext &context, TableFunctionBindInput &input,
                                                vector<LogicalType> &return_types, vector<string> &names);
-void MlpackLinRegTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output);
+void MlpackLinearRegressionTrainTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output);
 
 unique_ptr<FunctionData> MlpackLinRegPredTableBind(ClientContext &context, TableFunctionBindInput &input,
                                                    vector<LogicalType> &return_types, vector<string> &names);
-void MlpackLinRegPredTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output);
+void MlpackLinearRegressionPredictTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output);
 
 } // namespace duckdb

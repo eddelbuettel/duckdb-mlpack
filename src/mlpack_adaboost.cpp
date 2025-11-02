@@ -7,7 +7,7 @@ static bool verbose = false;
 
 // mlpack adaboost accessor
 
-void MlpackAdaboostTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
+void MlpackAdaboostTrainTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
 
 	if (verbose)
 		std::cout << "MlpackAdaboostFunction\n";
@@ -65,7 +65,7 @@ void MlpackAdaboostTableFunction(ClientContext &context, TableFunctionInput &dat
 	resdata.data_returned = true; // mark that we have been called
 }
 
-void MlpackAdaboostPredTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
+void MlpackAdaboostPredictTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
 	bool verbose = false;
 	auto &resdata = const_cast<MlpackModelData &>(data_p.bind_data->Cast<MlpackModelData>());
 

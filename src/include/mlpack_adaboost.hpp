@@ -8,8 +8,8 @@
 
 namespace duckdb {
 
-void MlpackAdaboostTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output);
+void MlpackAdaboostTrainTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output);
 
-void MlpackAdaboostPredTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output);
+void MlpackAdaboostPredictTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output);
 
 } // namespace duckdb
