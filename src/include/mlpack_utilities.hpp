@@ -4,10 +4,18 @@
 
 namespace duckdb {
 
+// returning 'int' for classification
 unique_ptr<FunctionData> MlpackTrainTableBindInt(ClientContext &context, TableFunctionBindInput &input,
                                                  vector<LogicalType> &return_types, vector<string> &names);
 
 unique_ptr<FunctionData> MlpackPredictTableBindInt(ClientContext &context, TableFunctionBindInput &input,
                                                    vector<LogicalType> &return_types, vector<string> &names);
+
+// returning 'double' for regression
+unique_ptr<FunctionData> MlpackTrainTableBindDouble(ClientContext &context, TableFunctionBindInput &input,
+                                                    vector<LogicalType> &return_types, vector<string> &names);
+
+unique_ptr<FunctionData> MlpackPredictTableBindDouble(ClientContext &context, TableFunctionBindInput &input,
+                                                      vector<LogicalType> &return_types, vector<string> &names);
 
 } // namespace duckdb

@@ -38,11 +38,11 @@ static void LoadInternal(ExtensionLoader &loader) {
 	auto mlpack_linreg_fit_function =
 	    TableFunction("mlpack_linear_regression_fit",
 	                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
-	                  MlpackLinearRegressionTrainTableFunction, MlpackLinRegTableBind);
+	                  MlpackLinearRegressionTrainTableFunction, MlpackTrainTableBindDouble);
 	loader.RegisterFunction(mlpack_linreg_fit_function);
 	auto mlpack_linreg_pred_function =
 	    TableFunction("mlpack_linear_regression_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
-	                  MlpackLinearRegressionPredictTableFunction, MlpackLinRegPredTableBind);
+	                  MlpackLinearRegressionPredictTableFunction, MlpackPredictTableBindDouble);
 	loader.RegisterFunction(mlpack_linreg_pred_function);
 
 	// Register logistic regression example fit and prediction

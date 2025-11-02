@@ -3,20 +3,6 @@
 
 namespace duckdb {
 
-unique_ptr<FunctionData> MlpackLinRegTableBind(ClientContext &context, TableFunctionBindInput &input,
-                                               vector<LogicalType> &return_types, vector<string> &names) {
-	auto resdata = make_uniq<MlpackModelData>(); // 'resdata' for result data i.e. outgoing
-	resdata->features = input.inputs[0].GetValue<std::string>();
-	resdata->labels = input.inputs[1].GetValue<std::string>();
-	resdata->parameters = input.inputs[2].GetValue<std::string>();
-	resdata->model = input.inputs[3].GetValue<std::string>();
-	names = {"fitted"};
-	return_types = {LogicalType::DOUBLE};
-	resdata->return_types = return_types;
-	resdata->names = names;
-	return std::move(resdata);
-}
-
 void MlpackLinearRegressionTrainTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
 	bool verbose = false;
 	auto &resdata = const_cast<MlpackModelData &>(data_p.bind_data->Cast<MlpackModelData>());
@@ -68,18 +54,6 @@ void MlpackLinearRegressionTrainTableFunction(ClientContext &context, TableFunct
 	}
 
 	resdata.data_returned = true; // mark that we have been called
-}
-
-unique_ptr<FunctionData> MlpackLinRegPredTableBind(ClientContext &context, TableFunctionBindInput &input,
-                                                   vector<LogicalType> &return_types, vector<string> &names) {
-	auto resdata = make_uniq<MlpackModelData>(); // 'resdata' for result data i.e. outgoing
-	resdata->features = input.inputs[0].GetValue<std::string>();
-	resdata->model = input.inputs[1].GetValue<std::string>();
-	names = {"predicted"};
-	return_types = {LogicalType::DOUBLE};
-	resdata->return_types = return_types;
-	resdata->names = names;
-	return std::move(resdata);
 }
 
 void MlpackLinearRegressionPredictTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
