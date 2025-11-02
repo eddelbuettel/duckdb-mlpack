@@ -52,6 +52,7 @@ set(EXTENSION_SOURCES
     src/mlpack_linear_regression.cpp
     src/mlpack_logistic_regression.cpp
     src/mlpack_extension.cpp
+    src/mlpack_utilities.cpp
 )
 
 build_static_extension(${TARGET_NAME} ${EXTENSION_SOURCES})

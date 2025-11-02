@@ -7,22 +7,6 @@ static bool verbose = false;
 
 // mlpack adaboost accessor
 
-unique_ptr<FunctionData> MlpackAdaboostTableBind(ClientContext &context, TableFunctionBindInput &input,
-                                                 vector<LogicalType> &return_types, vector<string> &names) {
-	if (verbose)
-		std::cout << "MlpackAdaboostTableBind\n";
-	auto resdata = make_uniq<MlpackModelData>();
-	resdata->features = input.inputs[0].GetValue<std::string>();
-	resdata->labels = input.inputs[1].GetValue<std::string>();
-	resdata->parameters = input.inputs[2].GetValue<std::string>();
-	resdata->model = input.inputs[3].GetValue<std::string>();
-	names = {"predicted"};
-	return_types = {LogicalType::INTEGER};
-	resdata->return_types = return_types;
-	resdata->names = names;
-	return std::move(resdata);
-}
-
 void MlpackAdaboostTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
 
 	if (verbose)
@@ -79,18 +63,6 @@ void MlpackAdaboostTableFunction(ClientContext &context, TableFunctionInput &dat
 	}
 
 	resdata.data_returned = true; // mark that we have been called
-}
-
-unique_ptr<FunctionData> MlpackAdaboostPredTableBind(ClientContext &context, TableFunctionBindInput &input,
-                                                     vector<LogicalType> &return_types, vector<string> &names) {
-	auto resdata = make_uniq<MlpackModelData>(); // 'resdata' for result data i.e. outgoing
-	resdata->features = input.inputs[0].GetValue<std::string>();
-	resdata->model = input.inputs[1].GetValue<std::string>();
-	names = {"predicted"};
-	return_types = {LogicalType::INTEGER};
-	resdata->return_types = return_types;
-	resdata->names = names;
-	return std::move(resdata);
 }
 
 void MlpackAdaboostPredTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {

@@ -1,6 +1,7 @@
 #define DUCKDB_EXTENSION_MAIN
 
 #include "mlpack_extension.hpp"
+#include "mlpack_utilities.hpp"
 
 #include "mlpack_adaboost.hpp"
 #include "mlpack_linear_regression.hpp"
@@ -26,11 +27,11 @@ static void LoadInternal(ExtensionLoader &loader) {
 	auto mlpack_adaboost_train_function =
 	    TableFunction("mlpack_adaboost_train",
 	                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
-	                  MlpackAdaboostTableFunction, MlpackAdaboostTableBind);
+	                  MlpackAdaboostTableFunction, MlpackTrainTableBindInt);
 	loader.RegisterFunction(mlpack_adaboost_train_function);
 	auto mlpack_adaboost_pred_function =
 	    TableFunction("mlpack_adaboost_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
-	                  MlpackAdaboostPredTableFunction, MlpackAdaboostPredTableBind);
+	                  MlpackAdaboostPredTableFunction, MlpackPredictTableBindInt);
 	loader.RegisterFunction(mlpack_adaboost_pred_function);
 
 	// Register linear regression example fit and prediction
@@ -48,11 +49,11 @@ static void LoadInternal(ExtensionLoader &loader) {
 	auto mlpack_logisticreg_fit_function =
 	    TableFunction("mlpack_logistic_regression_fit",
 	                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
-	                  MlpackLogisticRegTableFunction, MlpackLogisticRegTableBind);
+	                  MlpackLogisticRegTableFunction, MlpackTrainTableBindInt);
 	loader.RegisterFunction(mlpack_logisticreg_fit_function);
 	auto mlpack_logisticreg_pred_function =
 	    TableFunction("mlpack_logistic_regression_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
-	                  MlpackLogisticRegPredTableFunction, MlpackLogisticRegPredTableBind);
+	                  MlpackLogisticRegPredTableFunction, MlpackPredictTableBindInt);
 	loader.RegisterFunction(mlpack_logisticreg_pred_function);
 }
 

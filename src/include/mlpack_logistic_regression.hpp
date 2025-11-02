@@ -8,12 +8,8 @@
 
 namespace duckdb {
 
-unique_ptr<FunctionData> MlpackLogisticRegTableBind(ClientContext &context, TableFunctionBindInput &input,
-                                                    vector<LogicalType> &return_types, vector<string> &names);
 void MlpackLogisticRegTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output);
 
-unique_ptr<FunctionData> MlpackLogisticRegPredTableBind(ClientContext &context, TableFunctionBindInput &input,
-                                                        vector<LogicalType> &return_types, vector<string> &names);
 void MlpackLogisticRegPredTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output);
 
 } // namespace duckdb
