@@ -10,6 +10,7 @@ namespace duckdb {
 
 void MlpackLogisticRegressionTrainTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output);
 
-void MlpackLogisticRegressionPredictTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output);
+void MlpackLogisticRegressionPredictTableFunction(ClientContext &context, TableFunctionInput &data_p,
+                                                  DataChunk &output);
 
 } // namespace duckdb

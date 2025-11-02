@@ -60,7 +60,8 @@ void MlpackLogisticRegressionTrainTableFunction(ClientContext &context, TableFun
 	resdata.data_returned = true; // mark that we have been called
 }
 
-void MlpackLogisticRegressionPredictTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
+void MlpackLogisticRegressionPredictTableFunction(ClientContext &context, TableFunctionInput &data_p,
+                                                  DataChunk &output) {
 	bool verbose = false;
 	auto &resdata = const_cast<MlpackModelData &>(data_p.bind_data->Cast<MlpackModelData>());
 

@@ -5,7 +5,7 @@
 namespace duckdb {
 
 unique_ptr<FunctionData> MlpackTrainTableBindInt(ClientContext &context, TableFunctionBindInput &input,
-												 vector<LogicalType> &return_types, vector<string> &names) {
+                                                 vector<LogicalType> &return_types, vector<string> &names) {
 	auto resdata = make_uniq<MlpackModelData>();
 	resdata->features = input.inputs[0].GetValue<std::string>();
 	resdata->labels = input.inputs[1].GetValue<std::string>();
@@ -19,7 +19,7 @@ unique_ptr<FunctionData> MlpackTrainTableBindInt(ClientContext &context, TableFu
 }
 
 unique_ptr<FunctionData> MlpackPredictTableBindInt(ClientContext &context, TableFunctionBindInput &input,
-												   vector<LogicalType> &return_types, vector<string> &names) {
+                                                   vector<LogicalType> &return_types, vector<string> &names) {
 	auto resdata = make_uniq<MlpackModelData>();
 	resdata->features = input.inputs[0].GetValue<std::string>();
 	resdata->model = input.inputs[1].GetValue<std::string>();
@@ -30,4 +30,4 @@ unique_ptr<FunctionData> MlpackPredictTableBindInt(ClientContext &context, Table
 	return std::move(resdata);
 }
 
-}
+} // namespace duckdb
