@@ -6,6 +6,7 @@
 #include "mlpack_adaboost.hpp"
 #include "mlpack_linear_regression.hpp"
 #include "mlpack_logistic_regression.hpp"
+#include "mlpack_random_forest.hpp"
 
 #include <duckdb.hpp>
 #include <duckdb/common/exception.hpp>
@@ -55,6 +56,17 @@ static void LoadInternal(ExtensionLoader &loader) {
 	    TableFunction("mlpack_logistic_regression_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
 	                  MlpackLogisticRegressionPredictTableFunction, MlpackPredictTableBindInt);
 	loader.RegisterFunction(mlpack_logisticreg_pred_function);
+
+	// Register random forest example train and prediction function
+	auto mlpack_random_forest_train_function =
+	    TableFunction("mlpack_random_forest_train",
+	                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
+	                  MlpackRandomForestTrainTableFunction, MlpackTrainTableBindInt);
+	loader.RegisterFunction(mlpack_random_forest_train_function);
+	auto mlpack_random_forest_pred_function =
+	    TableFunction("mlpack_random_forest_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
+	                  MlpackRandomForestPredictTableFunction, MlpackPredictTableBindInt);
+	loader.RegisterFunction(mlpack_random_forest_pred_function);
 }
 
 void MlpackExtension::Load(ExtensionLoader &loader) {
