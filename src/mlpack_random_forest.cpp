@@ -43,16 +43,14 @@ void MlpackRandomForestTrainTableFunction(ClientContext &context, TableFunctionI
 		std::cout << "Setting seed " << seed << std::endl;
 	arma::arma_rng::set_seed(seed);
 
-    mlpack::RandomForest rf(dataset, labelsvec,
-                            nclasses /* Number of classes in dataset */,
-                            ntrees /* number of trees */);
-
+	mlpack::RandomForest rf(dataset, labelsvec, nclasses /* Number of classes in dataset */,
+	                        ntrees /* number of trees */);
 
 	if (verbose)
 		std::cout << SerializeObject<mlpack::RandomForest<>>(rf) << std::endl;
 	store_model(context, resdata.model, SerializeObject<mlpack::RandomForest<>>(rf));
 
-    // Predict the labels on the input data (no train/test here)
+	// Predict the labels on the input data (no train/test here)
 	arma::Row<size_t> predictedLabels;
 	rf.Classify(dataset, predictedLabels);
 	if (verbose)
