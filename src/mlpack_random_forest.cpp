@@ -38,6 +38,11 @@ void MlpackRandomForestTrainTableFunction(ClientContext &context, TableFunctionI
 	const int nclasses = params.count("nclasses") > 0 ? std::stoi(params["nclasses"]) : numClasses;
 	const int ntrees = params.count("ntrees") > 0 ? std::stoi(params["ntrees"]) : 10;
 	const bool silent = params.count("silent") > 0 ? (params["silent"] == "true" ? true : false) : false;
+	const size_t seed = params.count("seed") > 0 ? std::stoi(params["seed"]) : 123456;
+	if (verbose)
+		std::cout << "Setting seed " << seed << std::endl;
+	arma::arma_rng::set_seed(seed);
+
     mlpack::RandomForest rf(dataset, labelsvec,
                             nclasses /* Number of classes in dataset */,
                             ntrees /* number of trees */);
