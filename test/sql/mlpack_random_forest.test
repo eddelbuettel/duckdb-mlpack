@@ -7,6 +7,9 @@ require mlpack
 statement ok
 PRAGMA enable_verification
 
+statement ok
+SET GLOBAL threads = 1;
+
 # check mlpack_random_forest
 # running commands from sampleCall.sh 
 statement ok
@@ -58,3 +61,50 @@ SELECT COUNT(*) as n, predicted FROM B GROUP BY predicted;
 1	2
 
 
+statement ok
+DROP TABLE A;
+
+statement ok
+DROP TABLE B;
+
+statement ok
+DROP TABLE X;
+
+statement ok
+DROP TABLE Y;
+
+statement ok
+DROP TABLE M;
+
+statement ok
+DROP TABLE Z;
+
+statement ok
+CREATE TABLE X AS SELECT * FROM read_csv("docs/data/covertype_small_features.csv.gz") LIMIT 500;
+
+statement ok
+CREATE TABLE Y AS SELECT * FROM read_csv("docs/data/covertype_small_labels.csv.gz") LIMIT 500;
+
+statement ok
+CREATE TABLE Z (name VARCHAR, value VARCHAR);
+
+statement ok
+INSERT INTO Z VALUES ('ntrees', '20'), ('silent', 'true'), ('seed', '20251104'), ('threads', '1');
+
+statement ok
+CREATE TABLE M (key VARCHAR, json VARCHAR);
+
+statement ok
+CREATE TEMP TABLE A AS SELECT * FROM mlpack_random_forest_train("X", "Y", "Z", "M");
+
+### OpenMP gets in the way, 'SET threads = 1;' does not help
+#query II
+#SELECT COUNT(*) as n, predicted FROM A GROUP BY predicted;
+#----
+#183		0
+#267		1
+#20		2
+#1		3
+#4		4
+#16		5
+#9		6
