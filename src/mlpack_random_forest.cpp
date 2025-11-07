@@ -46,16 +46,16 @@ void MlpackRandomForestTrainTableFunction(ClientContext &context, TableFunctionI
 	{
 		curr_num_threads = omp_get_num_threads();
 	}
-	if (seed != -1) {
-		mlpack::RandomSeed(seed);
-		if (verbose) {
-			std::cout << "Setting seed " << seed << std::endl;
-		}
-	}
 	if (threads != -1) { // && curr_num_threads != 1) {
 		omp_set_num_threads(threads); 	// for the number of threads to one
 		if (verbose) {
 			std::cout << "Setting threads from " << curr_num_threads << " to " << threads << std::endl;
+		}
+	}
+	if (seed != -1) {
+		mlpack::RandomSeed(seed);
+		if (verbose) {
+			std::cout << "Setting seed " << seed << std::endl;
 		}
 	}
 
