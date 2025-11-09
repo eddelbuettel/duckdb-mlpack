@@ -41,12 +41,10 @@ void MlpackRandomForestTrainTableFunction(ClientContext &context, TableFunctionI
 	const int threads = params.count("threads") > 0 ? std::stoi(params["threads"]) : -1;
 	int curr_num_threads = -1;
 
-    #pragma omp parallel
-	{
-		curr_num_threads = omp_get_num_threads();
-	}
-	if (threads != -1) { // && curr_num_threads != 1) {
-		omp_set_num_threads(threads); 	// for the number of threads to one
+#pragma omp parallel
+	{ curr_num_threads = omp_get_num_threads(); }
+	if (threads != -1) {              // && curr_num_threads != 1) {
+		omp_set_num_threads(threads); // for the number of threads to one
 		if (verbose) {
 			std::cout << "Setting threads from " << curr_num_threads << " to " << threads << std::endl;
 		}
@@ -82,12 +80,11 @@ void MlpackRandomForestTrainTableFunction(ClientContext &context, TableFunctionI
 	resdata.data_returned = true; // mark that we have been called
 
 	if (threads != curr_num_threads) {
-		omp_set_num_threads(curr_num_threads); 	// for the number of threads to one
+		omp_set_num_threads(curr_num_threads); // for the number of threads to one
 		if (verbose) {
 			std::cout << "Resetting threads to " << curr_num_threads << std::endl;
 		}
 	}
-
 }
 
 void MlpackRandomForestPredictTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {

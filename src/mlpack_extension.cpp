@@ -70,9 +70,8 @@ static void LoadInternal(ExtensionLoader &loader) {
 
 	// Register settings 'verbose'
 	auto &config = DBConfig::GetConfig(dbinstance);
-	config.AddExtensionOption("mlpack_verbose",
-							  "Toggle whether to operate in verbose mode, default is false",
-							  LogicalType::BOOLEAN, Value(false));
+	config.AddExtensionOption("mlpack_verbose", "Toggle whether to operate in verbose mode, default is false",
+	                          LogicalType::BOOLEAN, Value(false));
 }
 
 void MlpackExtension::Load(ExtensionLoader &loader) {
