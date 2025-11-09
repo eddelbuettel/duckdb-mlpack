@@ -3,11 +3,10 @@
 
 namespace duckdb {
 
-static bool verbose = false;
-
 // mlpack adaboost accessor
 
 void MlpackRandomForestTrainTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
+	bool verbose = get_setting<bool>(context, "mlpack_verbose");
 
 	if (verbose)
 		std::cout << "MlpackAdaboostFunction\n";
@@ -92,7 +91,7 @@ void MlpackRandomForestTrainTableFunction(ClientContext &context, TableFunctionI
 }
 
 void MlpackRandomForestPredictTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
-	bool verbose = false;
+	bool verbose = get_setting<bool>(context, "mlpack_verbose");
 	auto &resdata = const_cast<MlpackModelData &>(data_p.bind_data->Cast<MlpackModelData>());
 
 	// if we have been called, return nothing
