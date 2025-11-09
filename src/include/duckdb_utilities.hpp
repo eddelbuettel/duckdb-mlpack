@@ -68,4 +68,11 @@ void UnserializeObject(std::string json, T &t) {
 	i(CEREAL_NVP(x));
 };
 
+template <typename T>
+T get_setting(ClientContext &context, std::string key) {
+	Value mlpack_value;
+	context.TryGetCurrentSetting(key, mlpack_value);
+	return mlpack_value.GetValue<T>();
+}
+
 } // namespace duckdb
