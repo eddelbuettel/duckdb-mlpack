@@ -16,7 +16,6 @@ endif()
 # DuckDB's extension distribution supports vcpkg. As such, dependencies can be added in ./vcpkg.json and then
 # used in cmake with find_package. Feel free to remove or replace with other dependencies.
 # Note that it should also be removed from vcpkg.json to prevent needlessly installing it..
-find_package(OpenSSL REQUIRED)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
@@ -60,8 +59,8 @@ build_static_extension(${TARGET_NAME} ${EXTENSION_SOURCES})
 build_loadable_extension(${TARGET_NAME} " " ${EXTENSION_SOURCES})
 
 # Link OpenSSL in both the static library as the loadable extension
-target_link_libraries(${EXTENSION_NAME} OpenSSL::SSL OpenSSL::Crypto ${ARMADILLO_LIBRARIES} OpenMP::OpenMP_CXX)
-target_link_libraries(${LOADABLE_EXTENSION_NAME} OpenSSL::SSL OpenSSL::Crypto ${ARMADILLO_LIBRARIES} OpenMP::OpenMP_CXX)
+target_link_libraries(${EXTENSION_NAME} ${ARMADILLO_LIBRARIES} OpenMP::OpenMP_CXX)
+target_link_libraries(${LOADABLE_EXTENSION_NAME} ${ARMADILLO_LIBRARIES} OpenMP::OpenMP_CXX)
 
 #list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 #find_path(MLPACK_INCLUDE_DIRS "mlpack.hpp")
