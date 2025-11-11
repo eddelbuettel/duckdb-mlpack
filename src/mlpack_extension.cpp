@@ -68,9 +68,11 @@ static void LoadInternal(ExtensionLoader &loader) {
 	                  MlpackRandomForestPredictTableFunction, MlpackPredictTableBindInt);
 	loader.RegisterFunction(mlpack_random_forest_pred_function);
 
-	// Register settings 'verbose'
+	// Register settings 'verbose' and 'silent'
 	auto &config = DBConfig::GetConfig(dbinstance);
 	config.AddExtensionOption("mlpack_verbose", "Toggle whether to operate in verbose mode, default is false",
+	                          LogicalType::BOOLEAN, Value(false));
+	config.AddExtensionOption("mlpack_silent", "Toggle whether to operate in silent mode, default is false",
 	                          LogicalType::BOOLEAN, Value(false));
 }
 

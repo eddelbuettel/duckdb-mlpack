@@ -7,6 +7,7 @@ namespace duckdb {
 
 void MlpackRandomForestTrainTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
 	bool verbose = get_setting<bool>(context, "mlpack_verbose");
+	bool silent = get_setting<bool>(context, "mlpack_silent");
 
 	if (verbose)
 		std::cout << "MlpackAdaboostFunction\n";
@@ -36,7 +37,7 @@ void MlpackRandomForestTrainTableFunction(ClientContext &context, TableFunctionI
 	int numClasses = arma::max(labelsvec) + 1;
 	const int nclasses = params.count("nclasses") > 0 ? std::stoi(params["nclasses"]) : numClasses;
 	const int ntrees = params.count("ntrees") > 0 ? std::stoi(params["ntrees"]) : 20;
-	const bool silent = params.count("silent") > 0 ? (params["silent"] == "true" ? true : false) : false;
+	if (params.count("silent") > 0) silent = (params["silent"] == "true" ? true : false);
 	const size_t seed = params.count("seed") > 0 ? std::stoi(params["seed"]) : -1;
 	const int threads = params.count("threads") > 0 ? std::stoi(params["threads"]) : -1;
 	int curr_num_threads = -1;

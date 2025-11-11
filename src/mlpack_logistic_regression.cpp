@@ -5,6 +5,7 @@ namespace duckdb {
 
 void MlpackLogisticRegressionTrainTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
 	bool verbose = get_setting<bool>(context, "mlpack_verbose");
+	bool silent = get_setting<bool>(context, "mlpack_silent");
 
 	auto &resdata = const_cast<MlpackModelData &>(data_p.bind_data->Cast<MlpackModelData>());
 
@@ -22,7 +23,7 @@ void MlpackLogisticRegressionTrainTableFunction(ClientContext &context, TableFun
 	std::map<std::string, std::string> params = get_parameters(context, resdata.parameters);
 
 	const double lambda = params.count("lambda") > 0 ? std::stod(params["lambda"]) : 0.0;
-	const bool silent = params.count("silent") > 0 ? (params["silent"] == "true" ? true : false) : false;
+	if (params.count("silent") > 0) silent = (params["silent"] == "true" ? true : false);
 
 	mlpack::LogisticRegression lr(dataset, labelsvec, lambda);
 
