@@ -29,7 +29,8 @@ void MlpackLinearRegressionTrainTableFunction(ClientContext &context, TableFunct
 
 	const double lambda = params.count("lambda") > 0 ? std::stod(params["lambda"]) : 0.0;
 	const bool intercept = params.count("intercept") > 0 ? (params["intercept"] == "true" ? true : false) : true;
-	if (params.count("silent") > 0) silent = (params["silent"] == "true" ? true : false);
+	if (params.count("silent") > 0)
+		silent = (params["silent"] == "true" ? true : false);
 	mlpack::LinearRegression lr(dataset, labelsvec, lambda, intercept);
 
 	if (verbose)

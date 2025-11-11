@@ -40,7 +40,8 @@ void MlpackAdaboostTrainTableFunction(ClientContext &context, TableFunctionInput
 	const int iterations = params.count("iterations") > 0 ? std::stoi(params["iterations"]) : 100;
 	const double tolerance = params.count("tolerance") > 0 ? std::stod(params["tolerance"]) : 2e-10;
 	const int perceptronIter = params.count("perceptronIter") > 0 ? std::stoi(params["perceptronIter"]) : 400;
-	if (params.count("silent") > 0) silent = (params["silent"] == "true" ? true : false);
+	if (params.count("silent") > 0)
+		silent = (params["silent"] == "true" ? true : false);
 
 	double ztProduct = a.Train(dataset, labelsvec, numClasses, iterations, tolerance, perceptronIter);
 

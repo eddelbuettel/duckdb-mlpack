@@ -23,7 +23,8 @@ void MlpackLogisticRegressionTrainTableFunction(ClientContext &context, TableFun
 	std::map<std::string, std::string> params = get_parameters(context, resdata.parameters);
 
 	const double lambda = params.count("lambda") > 0 ? std::stod(params["lambda"]) : 0.0;
-	if (params.count("silent") > 0) silent = (params["silent"] == "true" ? true : false);
+	if (params.count("silent") > 0)
+		silent = (params["silent"] == "true" ? true : false);
 
 	mlpack::LogisticRegression lr(dataset, labelsvec, lambda);
 
