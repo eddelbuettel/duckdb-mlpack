@@ -74,6 +74,15 @@ static void LoadInternal(ExtensionLoader &loader) {
 	                          LogicalType::BOOLEAN, Value(false));
 	config.AddExtensionOption("mlpack_silent", "Toggle whether to operate in silent mode, default is false",
 	                          LogicalType::BOOLEAN, Value(false));
+
+	// Version helpers
+	auto mlpack_version_function =
+		ScalarFunction("mlpack_mlpack_version", {}, LogicalType::VARCHAR, MlpackMlpackVersion);
+	loader.RegisterFunction(mlpack_version_function);
+	auto mlpack_armadillo_version_function =
+		ScalarFunction("mlpack_armadillo_version", {}, LogicalType::VARCHAR, MlpackArmadilloVersion);
+	loader.RegisterFunction(mlpack_armadillo_version_function);
+
 }
 
 void MlpackExtension::Load(ExtensionLoader &loader) {

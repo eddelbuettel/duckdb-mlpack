@@ -18,4 +18,8 @@ unique_ptr<FunctionData> MlpackTrainTableBindDouble(ClientContext &context, Tabl
 unique_ptr<FunctionData> MlpackPredictTableBindDouble(ClientContext &context, TableFunctionBindInput &input,
                                                       vector<LogicalType> &return_types, vector<string> &names);
 
+void MlpackMlpackVersion(DataChunk &args, ExpressionState &state, Vector &result);
+void MlpackArmadilloVersion(DataChunk &args, ExpressionState &state, Vector &result);
+
+
 } // namespace duckdb
