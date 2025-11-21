@@ -1,4 +1,32 @@
 
+// NB The work here exposed an issue now fixed in both mlpack and armadillo upstream.
+//    With mlpack PR 4027 and its updated random.hpp (which should be part of any release
+//    past the current version 4.6.2) and armadillo 15.2.2 the seeding of the RNGs is
+//    stable across multiple (OpenMP) threads so the results reproduce given a seed.
+//
+//    One can build with armadillo 15.2.2 via this diff
+// @@ -196,7 +196,7 @@ set(CEREAL_VERSION "1.1.2")
+//  set(OPENBLAS_VERSION "0.3.29")
+
+//  # Set library version to be used when fetching them from the source.
+// -set(ARMADILLO_FETCH_VERSION "12.6.5")
+// +set(ARMADILLO_FETCH_VERSION "15.2.2")
+//  set(ENSMALLEN_FETCH_VERSION "latest")
+//  set(CEREAL_FETCH_VERSION "1.3.2")
+//  set(MLPACK_FETCH_VERSION "latest")
+// @@ -716,7 +716,7 @@ macro(fetch_mlpack COMPILE_OPENBLAS)
+//        find_package(BLAS QUIET)
+//        find_package(LAPACK QUIET)
+//      endif()
+// -    get_deps(https://files.mlpack.org/armadillo-${ARMADILLO_FETCH_VERSION}.tar.gz armadillo armadillo-${ARMADILLO_FETCH_VERSION}.tar.gz)
+// +    get_deps(https://sourceforge.net/projects/arma/files/armadillo-${ARMADILLO_FETCH_VERSION}.tar.xz armadillo armadillo-${ARMADILLO_FETCH_VERSION}.tar.gz)
+//      set(ARMADILLO_INCLUDE_DIR ${GENERIC_INCLUDE_DIR})
+//      find_armadillo(${CMAKE_BINARY_DIR})
+//    endif()
+//
+//    and get an updated random.hpp per the PR 4027 from
+//    https://github.com/rcurtin/mlpack/blob/a618ecb6906912b92a618c06c76e8197525e8d74/src/mlpack/core/math/random.hpp
+
 #include "mlpack_random_forest.hpp"
 
 namespace duckdb {
