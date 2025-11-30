@@ -22,7 +22,7 @@ unique_ptr<FunctionData> MlpackTrainTableBindInt(ClientContext &context, TableFu
 }
 
 unique_ptr<FunctionData> MlpackUnsupervisedTrainTableBindInt(ClientContext &context, TableFunctionBindInput &input,
-															 vector<LogicalType> &return_types, vector<string> &names) {
+                                                             vector<LogicalType> &return_types, vector<string> &names) {
 	auto resdata = make_uniq<MlpackModelData>();
 	resdata->features = input.inputs[0].GetValue<std::string>();
 	resdata->parameters = input.inputs[1].GetValue<std::string>();
@@ -87,6 +87,5 @@ void MlpackArmadilloVersion(DataChunk &args, ExpressionState &state, Vector &res
 		return StringVector::AddString(result, arma_version::as_string());
 	});
 }
-
 
 } // namespace duckdb

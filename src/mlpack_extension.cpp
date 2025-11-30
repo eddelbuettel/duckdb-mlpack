@@ -38,8 +38,7 @@ static void LoadInternal(ExtensionLoader &loader) {
 
 	// Register kmeans example train and prediction function
 	auto mlpack_kmeans_train_function =
-	    TableFunction("mlpack_kmeans",
-	                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
+	    TableFunction("mlpack_kmeans", {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
 	                  MlpackKmeansTrainTableFunction, MlpackUnsupervisedTrainTableBindInt);
 	loader.RegisterFunction(mlpack_kmeans_train_function);
 
@@ -85,12 +84,11 @@ static void LoadInternal(ExtensionLoader &loader) {
 
 	// Version helpers
 	auto mlpack_version_function =
-		ScalarFunction("mlpack_mlpack_version", {}, LogicalType::VARCHAR, MlpackMlpackVersion);
+	    ScalarFunction("mlpack_mlpack_version", {}, LogicalType::VARCHAR, MlpackMlpackVersion);
 	loader.RegisterFunction(mlpack_version_function);
 	auto mlpack_armadillo_version_function =
-		ScalarFunction("mlpack_armadillo_version", {}, LogicalType::VARCHAR, MlpackArmadilloVersion);
+	    ScalarFunction("mlpack_armadillo_version", {}, LogicalType::VARCHAR, MlpackArmadilloVersion);
 	loader.RegisterFunction(mlpack_armadillo_version_function);
-
 }
 
 void MlpackExtension::Load(ExtensionLoader &loader) {

@@ -18,8 +18,10 @@
 //        find_package(BLAS QUIET)
 //        find_package(LAPACK QUIET)
 //      endif()
-// -    get_deps(https://files.mlpack.org/armadillo-${ARMADILLO_FETCH_VERSION}.tar.gz armadillo armadillo-${ARMADILLO_FETCH_VERSION}.tar.gz)
-// +    get_deps(https://sourceforge.net/projects/arma/files/armadillo-${ARMADILLO_FETCH_VERSION}.tar.xz armadillo armadillo-${ARMADILLO_FETCH_VERSION}.tar.gz)
+// -    get_deps(https://files.mlpack.org/armadillo-${ARMADILLO_FETCH_VERSION}.tar.gz armadillo
+// armadillo-${ARMADILLO_FETCH_VERSION}.tar.gz)
+// +    get_deps(https://sourceforge.net/projects/arma/files/armadillo-${ARMADILLO_FETCH_VERSION}.tar.xz armadillo
+// armadillo-${ARMADILLO_FETCH_VERSION}.tar.gz)
 //      set(ARMADILLO_INCLUDE_DIR ${GENERIC_INCLUDE_DIR})
 //      find_armadillo(${CMAKE_BINARY_DIR})
 //    endif()

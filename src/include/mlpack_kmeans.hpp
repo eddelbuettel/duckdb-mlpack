@@ -10,6 +10,6 @@ namespace duckdb {
 
 void MlpackKmeansTrainTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output);
 
-//void MlpackKmeansPredictTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output);
+// void MlpackKmeansPredictTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output);
 
 } // namespace duckdb
