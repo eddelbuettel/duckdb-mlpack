@@ -7,6 +7,9 @@ namespace duckdb {
 // returning 'int' for classification
 unique_ptr<FunctionData> MlpackTrainTableBindInt(ClientContext &context, TableFunctionBindInput &input,
                                                  vector<LogicalType> &return_types, vector<string> &names);
+// three inputs for unsupervisied training such as k-means: given X but no Y
+unique_ptr<FunctionData> MlpackUnsupervisedTrainTableBindInt(ClientContext &context, TableFunctionBindInput &input,
+															 vector<LogicalType> &return_types, vector<string> &names);
 
 unique_ptr<FunctionData> MlpackPredictTableBindInt(ClientContext &context, TableFunctionBindInput &input,
                                                    vector<LogicalType> &return_types, vector<string> &names);

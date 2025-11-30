@@ -4,6 +4,7 @@
 #include "mlpack_utilities.hpp"
 
 #include "mlpack_adaboost.hpp"
+#include "mlpack_kmeans.hpp"
 #include "mlpack_linear_regression.hpp"
 #include "mlpack_logistic_regression.hpp"
 #include "mlpack_random_forest.hpp"
@@ -34,6 +35,13 @@ static void LoadInternal(ExtensionLoader &loader) {
 	    TableFunction("mlpack_adaboost_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
 	                  MlpackAdaboostPredictTableFunction, MlpackPredictTableBindInt);
 	loader.RegisterFunction(mlpack_adaboost_pred_function);
+
+	// Register kmeans example train and prediction function
+	auto mlpack_kmeans_train_function =
+	    TableFunction("mlpack_kmeans",
+	                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
+	                  MlpackKmeansTrainTableFunction, MlpackUnsupervisedTrainTableBindInt);
+	loader.RegisterFunction(mlpack_kmeans_train_function);
 
 	// Register linear regression example fit and prediction
 	auto mlpack_linreg_fit_function =
