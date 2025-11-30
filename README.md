@@ -15,9 +15,10 @@ and self-contained used such as embedded system, or efficient binaries. Given th
 it is also an ideal candidate for a `duckdb` extension.
 
 This repository provides just that. It uses the excellent `duckdb` extension template and extends it
-minimally with an example function to run the Adaboost classifier.
+minimally with a handful of modeling functions: (regularized) logitic and linear regression,
+adaboost and random forest classification, and kmeans clustering.
 
-It is currently in 'MVP' status: _minimal_ indeed but also _viable_ as the following example shows.
+It is in 'MVP' status: somewhat _minimal_ but also _viable_ as the following example shows.
 
 ## Example
 
@@ -103,7 +104,8 @@ entry (when predicting the on training data -- the example here is _minimal_):
 ```
 
 A second and third example support, respectively, (regularized) linear regression with prediction
-and (regularized) logistic regression with prediction.
+and (regularized) logistic regression with prediction. A fourth example adds random forests, and a
+fifth example provides (unsupervised) kmeans clustering.
 
 ## Installation
 
@@ -141,7 +143,7 @@ repo-local data sets as well, see the comment at the top.
 
 ## TODO
 
-- [Partly DONE: linear regression, logistic regression] More examples of model fitting and prediction
+- [Mostly DONE: linear regression, logistic regression, random forest, kmeans] More examples of model fitting and prediction
 - [DONE] Maybe set up model serialization into table to predict on new data
 - Ideally: Work out how to `SELECT` from multiple tables
 - [DONE] Else maybe `SELECT` into temp. tables and pass temp. table names into routine
