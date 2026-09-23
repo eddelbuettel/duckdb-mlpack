@@ -33,7 +33,7 @@
 
 namespace duckdb {
 
-// mlpack adaboost accessor
+// mlpack random forest accessor
 
 void MlpackRandomForestTrainTableFunction(ClientContext &context, TableFunctionInput &data_p, DataChunk &output) {
 	bool verbose = get_setting<bool>(context, "mlpack_verbose");
