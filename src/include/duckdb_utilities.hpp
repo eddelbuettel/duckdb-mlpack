@@ -17,7 +17,6 @@ void store_vector(ClientContext &context, std::string model_table, std::string k
 
 template <typename T>
 arma::Mat<T> get_armadillo_matrix_transposed(ClientContext &context, std::string &table) {
-
 	Connection con(*context.db);
 
 	std::string query = std::string("SELECT * FROM ") + table + std::string(";");
