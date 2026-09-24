@@ -28,131 +28,124 @@ static void LoadInternal(ExtensionLoader &loader) {
 
 	// Register adaboost example train and prediction function
 	{
-		CreateTableFunctionInfo info(TableFunction("mlpack_adaboost_train",
-												   { LogicalType::VARCHAR, LogicalType::VARCHAR,
-													 LogicalType::VARCHAR, LogicalType::VARCHAR },
-												   MlpackAdaboostTrainTableFunction,
-												   MlpackTrainTableBindInt));
+		CreateTableFunctionInfo info(
+		    TableFunction("mlpack_adaboost_train",
+		                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                  MlpackAdaboostTrainTableFunction, MlpackTrainTableBindInt));
 		FunctionDescription desc;
-		desc.parameter_names = { "data", "labels", "parameters", "model" };
-		desc.description     = "Trains adaboost classification of 'labels' given 'data' and 'parameters', and stores 'model'.";
-		desc.examples        = { R"(SELECT * FROM mlpack_adaboost_train("data", "labels", "parameters", "model");)" };
-		desc.categories      = { "mlpack", "machine learning", "classification" };
+		desc.parameter_names = {"data", "labels", "parameters", "model"};
+		desc.description =
+		    "Trains adaboost classification of 'labels' given 'data' and 'parameters', and stores 'model'.";
+		desc.examples = {R"(SELECT * FROM mlpack_adaboost_train("data", "labels", "parameters", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "classification"};
 		info.descriptions.push_back(desc);
 		loader.RegisterFunction(std::move(info));
 	}
 	{
-		CreateTableFunctionInfo info(TableFunction("mlpack_adaboost_pred",
-												   { LogicalType::VARCHAR, LogicalType::VARCHAR },
-												   MlpackAdaboostPredictTableFunction,
-												   MlpackPredictTableBindInt));
+		CreateTableFunctionInfo info(TableFunction("mlpack_adaboost_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                                           MlpackAdaboostPredictTableFunction, MlpackPredictTableBindInt));
 		FunctionDescription desc;
-		desc.parameter_names = { "new_data", "model" };
-		desc.description     = "Predicts classification given 'new_data' and previously-fit adaboost 'model'.";
-		desc.examples        = { R"(SELECT * FROM mlpack_adaboost_pred("new_data", "model");)" };
-		desc.categories      = { "mlpack", "machine learning", "classification" };
+		desc.parameter_names = {"new_data", "model"};
+		desc.description = "Predicts classification given 'new_data' and previously-fit adaboost 'model'.";
+		desc.examples = {R"(SELECT * FROM mlpack_adaboost_pred("new_data", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "classification"};
 		info.descriptions.push_back(desc);
 		loader.RegisterFunction(std::move(info));
 	}
 
 	// Register kmeans example train and prediction function
 	{
-		CreateTableFunctionInfo info(TableFunction("mlpack_kmeans",
-												   { LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR },
-												   MlpackKmeansTrainTableFunction,
-												   MlpackUnsupervisedTrainTableBindInt));
+		CreateTableFunctionInfo info(
+		    TableFunction("mlpack_kmeans", {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                  MlpackKmeansTrainTableFunction, MlpackUnsupervisedTrainTableBindInt));
 		FunctionDescription desc;
-		desc.parameter_names = { "data", "parameters", "model" };
-		desc.description     = "Assigns clusters via k-means given 'data' and 'parameters', and stores 'model'.";
-		desc.examples        = { R"(SELECT * FROM mlpack_kmeans("data", "parameters", "model");)" };
-		desc.categories      = { "mlpack", "machine learning", "clustering" };
+		desc.parameter_names = {"data", "parameters", "model"};
+		desc.description = "Assigns clusters via k-means given 'data' and 'parameters', and stores 'model'.";
+		desc.examples = {R"(SELECT * FROM mlpack_kmeans("data", "parameters", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "clustering"};
 		info.descriptions.push_back(desc);
 		loader.RegisterFunction(std::move(info));
 	}
 
 	// Register linear regression example fit and prediction
 	{
-		CreateTableFunctionInfo info(TableFunction("mlpack_linear_regression_fit",
-												   { LogicalType::VARCHAR, LogicalType::VARCHAR,
-													 LogicalType::VARCHAR, LogicalType::VARCHAR },
-												   MlpackLinearRegressionTrainTableFunction,
-												   MlpackTrainTableBindInt));
+		CreateTableFunctionInfo info(
+		    TableFunction("mlpack_linear_regression_fit",
+		                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                  MlpackLinearRegressionTrainTableFunction, MlpackTrainTableBindInt));
 		FunctionDescription desc;
-		desc.parameter_names = { "data", "responses", "parameters", "model" };
-		desc.description     = "Fits linear regression of 'responses' given 'data' and 'parameters', and stores 'model'.";
-		desc.examples        = { R"(SELECT * FROM mlpack_linear_regression_fit("data", "responses", "parameters", "model");)" };
-		desc.categories      = { "mlpack", "machine learning", "regression" };
+		desc.parameter_names = {"data", "responses", "parameters", "model"};
+		desc.description = "Fits linear regression of 'responses' given 'data' and 'parameters', and stores 'model'.";
+		desc.examples = {R"(SELECT * FROM mlpack_linear_regression_fit("data", "responses", "parameters", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "regression"};
 		info.descriptions.push_back(desc);
 		loader.RegisterFunction(std::move(info));
 	}
 	{
-		CreateTableFunctionInfo info(TableFunction("mlpack_linear_regression_pred",
-												   { LogicalType::VARCHAR, LogicalType::VARCHAR },
-												   MlpackLinearRegressionPredictTableFunction,
-												   MlpackPredictTableBindInt));
+		CreateTableFunctionInfo info(
+		    TableFunction("mlpack_linear_regression_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                  MlpackLinearRegressionPredictTableFunction, MlpackPredictTableBindInt));
 		FunctionDescription desc;
-		desc.parameter_names = { "new_data", "model" };
-		desc.description     = "Predicts responses given 'new_data' and previously-fit linear regression 'model'.";
-		desc.examples        = { R"(SELECT * FROM mlpack_linear_regression_pred("new_data", "model");)" };
-		desc.categories      = { "mlpack", "machine learning", "regression" };
+		desc.parameter_names = {"new_data", "model"};
+		desc.description = "Predicts responses given 'new_data' and previously-fit linear regression 'model'.";
+		desc.examples = {R"(SELECT * FROM mlpack_linear_regression_pred("new_data", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "regression"};
 		info.descriptions.push_back(desc);
 		loader.RegisterFunction(std::move(info));
 	}
 
 	// Register logistic regression example fit and prediction
 	{
-		CreateTableFunctionInfo info(TableFunction("mlpack_logistic_regression_fit",
-												   { LogicalType::VARCHAR, LogicalType::VARCHAR,
-													 LogicalType::VARCHAR, LogicalType::VARCHAR },
-												   MlpackLogisticRegressionTrainTableFunction,
-												   MlpackTrainTableBindInt));
+		CreateTableFunctionInfo info(
+		    TableFunction("mlpack_logistic_regression_fit",
+		                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                  MlpackLogisticRegressionTrainTableFunction, MlpackTrainTableBindInt));
 		FunctionDescription desc;
-		desc.parameter_names = { "data", "labels", "parameters", "model" };
-		desc.description     = "Fits logistic regression classification of 'labels' given 'data' and 'parameters', and stores 'model'.";
-		desc.examples        = { R"(SELECT * FROM mlpack_logistic_regression_fit("data", "labels", "parameters", "model");)" };
-		desc.categories      = { "mlpack", "machine learning", "classification" };
+		desc.parameter_names = {"data", "labels", "parameters", "model"};
+		desc.description =
+		    "Fits logistic regression classification of 'labels' given 'data' and 'parameters', and stores 'model'.";
+		desc.examples = {R"(SELECT * FROM mlpack_logistic_regression_fit("data", "labels", "parameters", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "classification"};
 		info.descriptions.push_back(desc);
 		loader.RegisterFunction(std::move(info));
 	}
 	{
-		CreateTableFunctionInfo info(TableFunction("mlpack_logistic_regression_pred",
-												   { LogicalType::VARCHAR, LogicalType::VARCHAR },
-												   MlpackLogisticRegressionPredictTableFunction,
-												   MlpackPredictTableBindInt));
+		CreateTableFunctionInfo info(
+		    TableFunction("mlpack_logistic_regression_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                  MlpackLogisticRegressionPredictTableFunction, MlpackPredictTableBindInt));
 		FunctionDescription desc;
-		desc.parameter_names = { "new_data", "model" };
-		desc.description     = "Predicts classification given 'new_data' and previously-fit logistic regression 'model'.";
-		desc.examples        = { R"(SELECT * FROM mlpack_logistic_regression_pred("new_data", "model");)" };
-		desc.categories      = { "mlpack", "machine learning", "classification" };
+		desc.parameter_names = {"new_data", "model"};
+		desc.description = "Predicts classification given 'new_data' and previously-fit logistic regression 'model'.";
+		desc.examples = {R"(SELECT * FROM mlpack_logistic_regression_pred("new_data", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "classification"};
 		info.descriptions.push_back(desc);
 		loader.RegisterFunction(std::move(info));
 	}
 
 	// Register random forest example train and prediction function
 	{
-		CreateTableFunctionInfo info(TableFunction("mlpack_random_forest_train",
-												   { LogicalType::VARCHAR, LogicalType::VARCHAR,
-													 LogicalType::VARCHAR, LogicalType::VARCHAR },
-												   MlpackRandomForestTrainTableFunction,
-												   MlpackTrainTableBindInt));
+		CreateTableFunctionInfo info(
+		    TableFunction("mlpack_random_forest_train",
+		                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                  MlpackRandomForestTrainTableFunction, MlpackTrainTableBindInt));
 		FunctionDescription desc;
-		desc.parameter_names = { "data", "labels", "parameters", "model" };
-		desc.description     = "Trains random forest classification of 'labels' given 'data' and 'parameters', and store in 'model'.";
-		desc.examples        = { R"(SELECT * FROM mlpack_random_forest_train("data", "labels", "parameters", "model");)" };
-		desc.categories      = { "mlpack", "machine learning", "classification" };
+		desc.parameter_names = {"data", "labels", "parameters", "model"};
+		desc.description =
+		    "Trains random forest classification of 'labels' given 'data' and 'parameters', and store in 'model'.";
+		desc.examples = {R"(SELECT * FROM mlpack_random_forest_train("data", "labels", "parameters", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "classification"};
 		info.descriptions.push_back(desc);
 		loader.RegisterFunction(std::move(info));
 	}
 	{
 		CreateTableFunctionInfo info(TableFunction("mlpack_random_forest_pred",
-												   { LogicalType::VARCHAR, LogicalType::VARCHAR },
-												   MlpackRandomForestPredictTableFunction,
-												   MlpackPredictTableBindInt));
+		                                           {LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                                           MlpackRandomForestPredictTableFunction, MlpackPredictTableBindInt));
 		FunctionDescription desc;
-		desc.parameter_names = { "new_data", "model" };
-		desc.description     = "Predicts classification given 'new_data' and previously-fit random forest 'model'.";
-		desc.examples        = { R"(SELECT * FROM mlpack_random_forest_pred("new_data", "model");)" };
-		desc.categories      = { "mlpack", "machine learning", "classification" };
+		desc.parameter_names = {"new_data", "model"};
+		desc.description = "Predicts classification given 'new_data' and previously-fit random forest 'model'.";
+		desc.examples = {R"(SELECT * FROM mlpack_random_forest_pred("new_data", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "classification"};
 		info.descriptions.push_back(desc);
 		loader.RegisterFunction(std::move(info));
 	}
@@ -166,26 +159,22 @@ static void LoadInternal(ExtensionLoader &loader) {
 
 	// Version helpers
 	{
-		CreateScalarFunctionInfo info(ScalarFunction("mlpack_mlpack_version",
-													 {},
-													 LogicalType::VARCHAR,
-													 MlpackMlpackVersion));
+		CreateScalarFunctionInfo info(
+		    ScalarFunction("mlpack_mlpack_version", {}, LogicalType::VARCHAR, MlpackMlpackVersion));
 		FunctionDescription desc;
-		desc.description     = "Returns version number of mlpack library used.";
-		desc.examples        = { R"(SELECT * FROM mlpack_mlpack_version();)" };
-		desc.categories      = { "mlpack", "machine learning", "setup" };
+		desc.description = "Returns version number of mlpack library used.";
+		desc.examples = {R"(SELECT * FROM mlpack_mlpack_version();)"};
+		desc.categories = {"mlpack", "machine learning", "setup"};
 		info.descriptions.push_back(desc);
 		loader.RegisterFunction(std::move(info));
 	}
 	{
-		CreateScalarFunctionInfo info(ScalarFunction("mlpack_armadillo_version",
-													 {},
-													 LogicalType::VARCHAR,
-													 MlpackArmadilloVersion));
+		CreateScalarFunctionInfo info(
+		    ScalarFunction("mlpack_armadillo_version", {}, LogicalType::VARCHAR, MlpackArmadilloVersion));
 		FunctionDescription desc;
-		desc.description     = "Returns version number of armadillo library used.";
-		desc.examples        = { R"(SELECT * FROM mlpack_armadillo_version();)" };
-		desc.categories      = { "mlpack", "machine learning", "setup" };
+		desc.description = "Returns version number of armadillo library used.";
+		desc.examples = {R"(SELECT * FROM mlpack_armadillo_version();)"};
+		desc.categories = {"mlpack", "machine learning", "setup"};
 		info.descriptions.push_back(desc);
 		loader.RegisterFunction(std::move(info));
 	}
