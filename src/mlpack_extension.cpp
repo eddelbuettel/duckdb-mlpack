@@ -5,6 +5,7 @@
 
 #include "mlpack_adaboost.hpp"
 #include "mlpack_kmeans.hpp"
+#include "mlpack_bayesian_linear_regression.hpp"
 #include "mlpack_linear_regression.hpp"
 #include "mlpack_logistic_regression.hpp"
 #include "mlpack_random_forest.hpp"
@@ -146,6 +147,35 @@ static void LoadInternal(ExtensionLoader &loader) {
 		desc.description = "Predicts classification given 'new_data' and previously-fit random forest 'model'.";
 		desc.examples = {R"(SELECT * FROM mlpack_random_forest_pred("new_data", "model");)"};
 		desc.categories = {"mlpack", "machine learning", "classification"};
+		info.descriptions.push_back(desc);
+		loader.RegisterFunction(std::move(info));
+	}
+
+	// Register bayesian linear regression example fit and prediction
+	{
+		CreateTableFunctionInfo info(
+		    TableFunction("mlpack_bayesian_linear_regression_fit",
+		                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                  MlpackBayesianLinearRegressionTrainTableFunction, MlpackTrainTableBindInt));
+		FunctionDescription desc;
+		desc.parameter_names = {"data", "responses", "parameters", "model"};
+		desc.description =
+		    "Fits Bayesian linear regression of 'responses' given 'data' and 'parameters', and stores 'model'.";
+		desc.examples = {
+		    R"(SELECT * FROM mlpack_bayesian_linear_regression_fit("data", "responses", "parameters", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "regression"};
+		info.descriptions.push_back(desc);
+		loader.RegisterFunction(std::move(info));
+	}
+	{
+		CreateTableFunctionInfo info(
+		    TableFunction("mlpack_bayesian_linear_regression_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                  MlpackBayesianLinearRegressionPredictTableFunction, MlpackPredictTableBindInt));
+		FunctionDescription desc;
+		desc.parameter_names = {"new_data", "model"};
+		desc.description = "Predicts responses given 'new_data' and previously-fit Bayesian linear regression 'model'.";
+		desc.examples = {R"(SELECT * FROM mlpack_bayesian_linear_regression_pred("new_data", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "regression"};
 		info.descriptions.push_back(desc);
 		loader.RegisterFunction(std::move(info));
 	}
