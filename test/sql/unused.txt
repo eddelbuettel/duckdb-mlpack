@@ -1,0 +1,47 @@
+
+statement ok
+DROP TABLE A;
+
+statement ok
+DROP TABLE B;
+
+statement ok
+DROP TABLE X;
+
+statement ok
+DROP TABLE Y;
+
+statement ok
+DROP TABLE M;
+
+statement ok
+DROP TABLE Z;
+
+statement ok
+CREATE TABLE X AS SELECT * FROM read_csv("docs/data/covertype_small_features.csv.gz") LIMIT 500;
+
+statement ok
+CREATE TABLE Y AS SELECT * FROM read_csv("docs/data/covertype_small_labels.csv.gz") LIMIT 500;
+
+statement ok
+CREATE TABLE Z (name VARCHAR, value VARCHAR);
+
+statement ok
+INSERT INTO Z VALUES ('ntrees', '20'), ('silent', 'false');
+
+statement ok
+CREATE TABLE M (key VARCHAR, json VARCHAR);
+
+statement ok
+CREATE TEMP TABLE A AS SELECT * FROM mlpack_random_forest_train("X", "Y", "Z", "M");
+
+query II
+SELECT COUNT(*) as n, predicted FROM A GROUP BY predicted;
+----
+728     0
+1012    1
+129     2
+6       3
+23      4
+50      5
+52      6
