@@ -48,8 +48,9 @@ include_directories(${MLPACK_INCLUDE_DIRS})
 set(EXTENSION_SOURCES
     src/duckdb_utilities.cpp
     src/mlpack_adaboost.cpp
-    src/mlpack_kmeans.cpp
     src/mlpack_bayesian_linear_regression.cpp
+    src/mlpack_kmeans.cpp
+    src/mlpack_lars.cpp
     src/mlpack_linear_regression.cpp
     src/mlpack_logistic_regression.cpp
     src/mlpack_random_forest.cpp

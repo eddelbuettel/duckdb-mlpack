@@ -4,8 +4,9 @@
 #include "mlpack_utilities.hpp"
 
 #include "mlpack_adaboost.hpp"
-#include "mlpack_kmeans.hpp"
 #include "mlpack_bayesian_linear_regression.hpp"
+#include "mlpack_kmeans.hpp"
+#include "mlpack_lars.hpp"
 #include "mlpack_linear_regression.hpp"
 #include "mlpack_logistic_regression.hpp"
 #include "mlpack_random_forest.hpp"
@@ -175,6 +176,35 @@ static void LoadInternal(ExtensionLoader &loader) {
 		desc.parameter_names = {"new_data", "model"};
 		desc.description = "Predicts responses given 'new_data' and previously-fit Bayesian linear regression 'model'.";
 		desc.examples = {R"(SELECT * FROM mlpack_bayesian_linear_regression_pred("new_data", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "regression"};
+		info.descriptions.push_back(desc);
+		loader.RegisterFunction(std::move(info));
+	}
+
+	// Register lars example fit and prediction
+	{
+		CreateTableFunctionInfo info(
+		    TableFunction("mlpack_lars_fit",
+		                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                  MlpackLARSTrainTableFunction, MlpackTrainTableBindInt));
+		FunctionDescription desc;
+		desc.parameter_names = {"data", "responses", "parameters", "model"};
+		desc.description =
+		    "Fits LARS regression of 'responses' given 'data' and 'parameters', and stores 'model'.";
+		desc.examples = {
+		    R"(SELECT * FROM mlpack_lars_fit("data", "responses", "parameters", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "regression"};
+		info.descriptions.push_back(desc);
+		loader.RegisterFunction(std::move(info));
+	}
+	{
+		CreateTableFunctionInfo info(
+		    TableFunction("mlpack_lars_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                  MlpackLARSPredictTableFunction, MlpackPredictTableBindInt));
+		FunctionDescription desc;
+		desc.parameter_names = {"new_data", "model"};
+		desc.description = "Predicts responses given 'new_data' and previously-fit LARS 'model'.";
+		desc.examples = {R"(SELECT * FROM mlpack_lars_pred("new_data", "model");)"};
 		desc.categories = {"mlpack", "machine learning", "regression"};
 		info.descriptions.push_back(desc);
 		loader.RegisterFunction(std::move(info));
