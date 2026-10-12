@@ -29,13 +29,16 @@ void MlpackLARSTrainTableFunction(ClientContext &context, TableFunctionInput &da
 
 	const double lambda1 = params.count("lambda1") > 0 ? std::stod(params["lambda1"]) : 0.0;
 	const double lambda2 = params.count("lambda2") > 0 ? std::stod(params["lambda2"]) : 0.0;
-	const bool useCholesky = params.count("use_cholesky") > 0 ? (params["use_cholesky"] == "true" ? true : false) : true;
-	const bool noIntercept = params.count("no_intercept") > 0 ? (params["no_intercept"] == "true" ? true : false) : true;
-	const bool noNormalize = params.count("no_normalize") > 0 ? (params["no_normalize"] == "true" ? true : false) : true;
+	const bool useCholesky =
+	    params.count("use_cholesky") > 0 ? (params["use_cholesky"] == "true" ? true : false) : true;
+	const bool noIntercept =
+	    params.count("no_intercept") > 0 ? (params["no_intercept"] == "true" ? true : false) : true;
+	const bool noNormalize =
+	    params.count("no_normalize") > 0 ? (params["no_normalize"] == "true" ? true : false) : true;
 	if (params.count("silent") > 0)
 		silent = (params["silent"] == "true" ? true : false);
 
-	mlpack::LARS<>* lars = new mlpack::LARS<>(useCholesky, lambda1, lambda2);
+	mlpack::LARS<> *lars = new mlpack::LARS<>(useCholesky, lambda1, lambda2);
 	lars->FitIntercept(!noIntercept);
 	lars->NormalizeData(!noNormalize);
 	lars->Train(dataset, labelsvec, true /* transpose */);

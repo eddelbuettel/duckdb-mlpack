@@ -1,4 +1,4 @@
-# name: test/sql/mlpack_bayesian_linear_regression.test
+# name: test/sql/mlpack_lars.test
 # description: test bayesian_linear_regression in mlpack extension
 # group: [sql]
 
