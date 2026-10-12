@@ -11,6 +11,7 @@
 #include "mlpack_linear_regression.hpp"
 #include "mlpack_logistic_regression.hpp"
 #include "mlpack_random_forest.hpp"
+#include "mlpack_softmax_regression.hpp"
 
 #include <duckdb.hpp>
 #include <duckdb/common/exception.hpp>
@@ -184,24 +185,20 @@ static void LoadInternal(ExtensionLoader &loader) {
 
 	// Register lars example fit and prediction
 	{
-		CreateTableFunctionInfo info(
-		    TableFunction("mlpack_lars_fit",
-		                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
-		                  MlpackLARSTrainTableFunction, MlpackTrainTableBindInt));
+		CreateTableFunctionInfo info(TableFunction(
+		    "mlpack_lars_fit", {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
+		    MlpackLARSTrainTableFunction, MlpackTrainTableBindInt));
 		FunctionDescription desc;
 		desc.parameter_names = {"data", "responses", "parameters", "model"};
-		desc.description =
-		    "Fits LARS regression of 'responses' given 'data' and 'parameters', and stores 'model'.";
-		desc.examples = {
-		    R"(SELECT * FROM mlpack_lars_fit("data", "responses", "parameters", "model");)"};
+		desc.description = "Fits LARS regression of 'responses' given 'data' and 'parameters', and stores 'model'.";
+		desc.examples = {R"(SELECT * FROM mlpack_lars_fit("data", "responses", "parameters", "model");)"};
 		desc.categories = {"mlpack", "machine learning", "regression"};
 		info.descriptions.push_back(desc);
 		loader.RegisterFunction(std::move(info));
 	}
 	{
-		CreateTableFunctionInfo info(
-		    TableFunction("mlpack_lars_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
-		                  MlpackLARSPredictTableFunction, MlpackPredictTableBindInt));
+		CreateTableFunctionInfo info(TableFunction("mlpack_lars_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                                           MlpackLARSPredictTableFunction, MlpackPredictTableBindInt));
 		FunctionDescription desc;
 		desc.parameter_names = {"new_data", "model"};
 		desc.description = "Predicts responses given 'new_data' and previously-fit LARS 'model'.";
@@ -233,6 +230,34 @@ static void LoadInternal(ExtensionLoader &loader) {
 		desc.parameter_names = {"new_data", "model"};
 		desc.description = "Predicts classification given 'new_data' and previously-fit decision tree 'model'.";
 		desc.examples = {R"(SELECT * FROM mlpack_decision_tree_pred("new_data", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "classification"};
+		info.descriptions.push_back(desc);
+		loader.RegisterFunction(std::move(info));
+	}
+
+	// Register softmax regression example fit and prediction function
+	{
+		CreateTableFunctionInfo info(
+		    TableFunction("mlpack_softmax_regression_fit",
+		                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                  MlpackSoftmaxRegressionTrainTableFunction, MlpackTrainTableBindInt));
+		FunctionDescription desc;
+		desc.parameter_names = {"data", "labels", "parameters", "model"};
+		desc.description =
+		    "Fits softmax regression classification of 'labels' given 'data' and 'parameters', and stores 'model'.";
+		desc.examples = {R"(SELECT * FROM mlpack_softmax_regression_fit("data", "labels", "parameters", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "classification"};
+		info.descriptions.push_back(desc);
+		loader.RegisterFunction(std::move(info));
+	}
+	{
+		CreateTableFunctionInfo info(
+		    TableFunction("mlpack_softmax_regression_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                  MlpackSoftmaxRegressionPredictTableFunction, MlpackPredictTableBindInt));
+		FunctionDescription desc;
+		desc.parameter_names = {"new_data", "model"};
+		desc.description = "Predicts classification given 'new_data' and previously-fit softmax regression 'model'.";
+		desc.examples = {R"(SELECT * FROM mlpack_softmax_regression_pred("new_data", "model");)"};
 		desc.categories = {"mlpack", "machine learning", "classification"};
 		info.descriptions.push_back(desc);
 		loader.RegisterFunction(std::move(info));
