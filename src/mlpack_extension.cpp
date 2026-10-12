@@ -5,6 +5,7 @@
 
 #include "mlpack_adaboost.hpp"
 #include "mlpack_bayesian_linear_regression.hpp"
+#include "mlpack_decision_tree.hpp"
 #include "mlpack_kmeans.hpp"
 #include "mlpack_lars.hpp"
 #include "mlpack_linear_regression.hpp"
@@ -206,6 +207,33 @@ static void LoadInternal(ExtensionLoader &loader) {
 		desc.description = "Predicts responses given 'new_data' and previously-fit LARS 'model'.";
 		desc.examples = {R"(SELECT * FROM mlpack_lars_pred("new_data", "model");)"};
 		desc.categories = {"mlpack", "machine learning", "regression"};
+		info.descriptions.push_back(desc);
+		loader.RegisterFunction(std::move(info));
+	}
+
+	// Register decision tree example train and prediction function
+	{
+		CreateTableFunctionInfo info(
+		    TableFunction("mlpack_decision_tree_train",
+		                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                  MlpackDecisionTreeTrainTableFunction, MlpackTrainTableBindInt));
+		FunctionDescription desc;
+		desc.parameter_names = {"data", "labels", "parameters", "model"};
+		desc.description =
+		    "Trains decision tree classification of 'labels' given 'data' and 'parameters', and stores 'model'.";
+		desc.examples = {R"(SELECT * FROM mlpack_decision_tree_train("data", "labels", "parameters", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "classification"};
+		info.descriptions.push_back(desc);
+		loader.RegisterFunction(std::move(info));
+	}
+	{
+		CreateTableFunctionInfo info(TableFunction("mlpack_decision_tree_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                                           MlpackDecisionTreePredictTableFunction, MlpackPredictTableBindInt));
+		FunctionDescription desc;
+		desc.parameter_names = {"new_data", "model"};
+		desc.description = "Predicts classification given 'new_data' and previously-fit decision tree 'model'.";
+		desc.examples = {R"(SELECT * FROM mlpack_decision_tree_pred("new_data", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "classification"};
 		info.descriptions.push_back(desc);
 		loader.RegisterFunction(std::move(info));
 	}
