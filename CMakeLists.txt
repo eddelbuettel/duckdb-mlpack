@@ -54,6 +54,7 @@ set(EXTENSION_SOURCES
     src/mlpack_lars.cpp
     src/mlpack_linear_regression.cpp
     src/mlpack_logistic_regression.cpp
+    src/mlpack_naive_bayes.cpp
     src/mlpack_random_forest.cpp
     src/mlpack_softmax_regression.cpp
     src/mlpack_extension.cpp

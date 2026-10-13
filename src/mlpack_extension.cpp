@@ -10,6 +10,7 @@
 #include "mlpack_lars.hpp"
 #include "mlpack_linear_regression.hpp"
 #include "mlpack_logistic_regression.hpp"
+#include "mlpack_naive_bayes.hpp"
 #include "mlpack_random_forest.hpp"
 #include "mlpack_softmax_regression.hpp"
 
@@ -208,6 +209,34 @@ static void LoadInternal(ExtensionLoader &loader) {
 		loader.RegisterFunction(std::move(info));
 	}
 
+	// Register naive bayes example train and prediction function
+	{
+		CreateTableFunctionInfo info(
+		    TableFunction("mlpack_naive_bayes_train",
+		                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                  MlpackNaiveBayesTrainTableFunction, MlpackTrainTableBindInt));
+		FunctionDescription desc;
+		desc.parameter_names = {"data", "labels", "parameters", "model"};
+		desc.description =
+		    "Trains naive bayes classification of 'labels' given 'data' and 'parameters', and stores 'model'.";
+		desc.examples = {R"(SELECT * FROM mlpack_naive_bayes_train("data", "labels", "parameters", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "classification"};
+		info.descriptions.push_back(desc);
+		loader.RegisterFunction(std::move(info));
+	}
+	{
+		CreateTableFunctionInfo info(TableFunction("mlpack_naive_bayes_pred",
+		                                           {LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                                           MlpackNaiveBayesPredictTableFunction, MlpackPredictTableBindInt));
+		FunctionDescription desc;
+		desc.parameter_names = {"new_data", "model"};
+		desc.description = "Predicts classification given 'new_data' and previously-fit naive bayes 'model'.";
+		desc.examples = {R"(SELECT * FROM mlpack_naive_bayes_pred("new_data", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "classification"};
+		info.descriptions.push_back(desc);
+		loader.RegisterFunction(std::move(info));
+	}
+
 	// Register decision tree example train and prediction function
 	{
 		CreateTableFunctionInfo info(
@@ -224,7 +253,8 @@ static void LoadInternal(ExtensionLoader &loader) {
 		loader.RegisterFunction(std::move(info));
 	}
 	{
-		CreateTableFunctionInfo info(TableFunction("mlpack_decision_tree_pred", {LogicalType::VARCHAR, LogicalType::VARCHAR},
+		CreateTableFunctionInfo info(TableFunction("mlpack_decision_tree_pred",
+		                                           {LogicalType::VARCHAR, LogicalType::VARCHAR},
 		                                           MlpackDecisionTreePredictTableFunction, MlpackPredictTableBindInt));
 		FunctionDescription desc;
 		desc.parameter_names = {"new_data", "model"};
