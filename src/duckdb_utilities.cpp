@@ -60,4 +60,17 @@ void store_vector(ClientContext &context, std::string model_table, std::string k
 	con.Query(query);
 }
 
+std::string retrieve_vector(ClientContext &context, std::string model_table, std::string key) {
+	Connection con(*context.db);
+	std::string query = std::string("SELECT json FROM " + model_table + " WHERE key = '" + key + "';");
+	auto result = con.Query(query);
+	idx_t n = result->RowCount(), k = result->ColumnCount();
+	assert(k == 1);
+	if (n == 0)
+		return ("");
+	result->Fetch();
+	std::string vec = result->GetValue(0, 0).GetValue<std::string>();
+	return vec;
+}
+
 } // namespace duckdb

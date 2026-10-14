@@ -16,7 +16,8 @@ it is also an ideal candidate for a `duckdb` extension.
 
 This repository provides just that. It uses the excellent `duckdb` extension template and extends it
 minimally with a handful of modeling functions: (regularized) logitic and linear regression,
-adaboost and random forest classification, and kmeans clustering.
+adaboost, decision tree, naive bayes, softmax regression and linear svm classification, and kmeans
+clustering.
 
 It is in 'MVP' status: somewhat _minimal_ but also _viable_ as the following example shows.
 
@@ -105,7 +106,9 @@ entry (when predicting the on training data -- the example here is _minimal_):
 
 A second and third example support, respectively, (regularized) linear regression with prediction
 and (regularized) logistic regression with prediction. A fourth example adds random forests, and a
-fifth example provides (unsupervised) kmeans clustering.
+fifth example provides (unsupervised) kmeans clustering. Further classifiers follow the same
+`*_train`/`*_pred` (or `*_fit`/`*_pred`) pattern: naive bayes, decision tree, softmax regression,
+linear svm, and (as regressions) bayesian linear regression and lars.
 
 ## Installation
 

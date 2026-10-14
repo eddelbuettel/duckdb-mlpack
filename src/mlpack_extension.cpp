@@ -9,6 +9,7 @@
 #include "mlpack_kmeans.hpp"
 #include "mlpack_lars.hpp"
 #include "mlpack_linear_regression.hpp"
+#include "mlpack_linear_svm.hpp"
 #include "mlpack_logistic_regression.hpp"
 #include "mlpack_naive_bayes.hpp"
 #include "mlpack_random_forest.hpp"
@@ -288,6 +289,34 @@ static void LoadInternal(ExtensionLoader &loader) {
 		desc.parameter_names = {"new_data", "model"};
 		desc.description = "Predicts classification given 'new_data' and previously-fit softmax regression 'model'.";
 		desc.examples = {R"(SELECT * FROM mlpack_softmax_regression_pred("new_data", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "classification"};
+		info.descriptions.push_back(desc);
+		loader.RegisterFunction(std::move(info));
+	}
+
+	// Register linear svm example train and prediction function
+	{
+		CreateTableFunctionInfo info(
+		    TableFunction("mlpack_linear_svm_train",
+		                  {LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                  MlpackLinearSVMTrainTableFunction, MlpackTrainTableBindInt));
+		FunctionDescription desc;
+		desc.parameter_names = {"data", "labels", "parameters", "model"};
+		desc.description =
+		    "Trains linear svm classification of 'labels' given 'data' and 'parameters', and stores 'model'.";
+		desc.examples = {R"(SELECT * FROM mlpack_linear_svm_train("data", "labels", "parameters", "model");)"};
+		desc.categories = {"mlpack", "machine learning", "classification"};
+		info.descriptions.push_back(desc);
+		loader.RegisterFunction(std::move(info));
+	}
+	{
+		CreateTableFunctionInfo info(TableFunction("mlpack_linear_svm_pred",
+		                                           {LogicalType::VARCHAR, LogicalType::VARCHAR},
+		                                           MlpackLinearSVMPredictTableFunction, MlpackPredictTableBindInt));
+		FunctionDescription desc;
+		desc.parameter_names = {"new_data", "model"};
+		desc.description = "Predicts classification given 'new_data' and previously-fit linear svm 'model'.";
+		desc.examples = {R"(SELECT * FROM mlpack_linear_svm_pred("new_data", "model");)"};
 		desc.categories = {"mlpack", "machine learning", "classification"};
 		info.descriptions.push_back(desc);
 		loader.RegisterFunction(std::move(info));

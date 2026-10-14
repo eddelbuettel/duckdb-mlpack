@@ -14,6 +14,7 @@ void store_model(ClientContext &context, std::string model_table, std::string mo
 std::string retrieve_model(ClientContext &context, std::string model_table);
 std::string serialize_vector(const arma::vec &vec);
 void store_vector(ClientContext &context, std::string model_table, std::string key, std::string model_as_json);
+std::string retrieve_vector(ClientContext &context, std::string model_table, std::string key);
 
 template <typename T>
 arma::Mat<T> get_armadillo_matrix_transposed(ClientContext &context, std::string &table) {
