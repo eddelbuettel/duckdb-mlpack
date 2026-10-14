@@ -144,16 +144,16 @@ sets regrouped in this repositorym and [described more fully on this
 page](https://eddelbuettel.github.io/duckdb-mlpack/data/). The script can be adjusted to use the
 repo-local data sets as well, see the comment at the top.
 
-## TODO
+## TODO / DONE List
 
-- [Mostly DONE: linear regression, logistic regression, random forest, kmeans] More examples of model fitting and prediction
-- [DONE] Maybe set up model serialization into table to predict on new data
-- Ideally: Work out how to `SELECT` from multiple tables
-- [DONE] Else maybe `SELECT` into temp. tables and pass temp. table names into routine
-- [DONE] Read parameters from auxiliary table
-- ~~Maybe add `mlpack` as a `git submodule`~~ CMake now pulls it in as a dependency 
-- [DONE] Submit as duckdb community extension
-- [DONE] Add unit tests
+- [x] More examples of model fitting and prediction
+- [x] Maybe set up model serialization into table to predict on new data
+- [ ] Ideally: Work out how to `SELECT` from multiple tables
+- [x] Else maybe `SELECT` into temp. tables and pass temp. table names into routine
+- [x] Read parameters from auxiliary table
+- [x] ~~Maybe add `mlpack` as a `git submodule`~~ CMake now pulls it in as a dependency 
+- [x] Submit as duckdb community extension
+- [x] Add unit tests
 
 ## Acknowledgements
 
