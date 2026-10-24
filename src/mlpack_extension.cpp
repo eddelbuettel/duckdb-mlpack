@@ -183,7 +183,7 @@ static void LoadInternal(ExtensionLoader &loader) {
 		    ScalarFunction("mlpack_mlpack_version", {}, LogicalType::VARCHAR, MlpackMlpackVersion));
 		FunctionDescription desc;
 		desc.description = "Returns version number of mlpack library used.";
-		desc.examples = {R"(SELECT * FROM mlpack_mlpack_version();)"};
+		desc.examples = {R"(SELECT mlpack_mlpack_version();)"};
 		desc.categories = {"mlpack", "machine learning", "setup"};
 		info.descriptions.push_back(desc);
 		loader.RegisterFunction(std::move(info));
@@ -193,7 +193,7 @@ static void LoadInternal(ExtensionLoader &loader) {
 		    ScalarFunction("mlpack_armadillo_version", {}, LogicalType::VARCHAR, MlpackArmadilloVersion));
 		FunctionDescription desc;
 		desc.description = "Returns version number of armadillo library used.";
-		desc.examples = {R"(SELECT * FROM mlpack_armadillo_version();)"};
+		desc.examples = {R"(SELECT mlpack_armadillo_version();)"};
 		desc.categories = {"mlpack", "machine learning", "setup"};
 		info.descriptions.push_back(desc);
 		loader.RegisterFunction(std::move(info));
