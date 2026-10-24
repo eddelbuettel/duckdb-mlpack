@@ -31,7 +31,7 @@ arma::Mat<T> get_armadillo_matrix_transposed(ClientContext &context, std::string
 		for (idx_t row_idx = 0; row_idx < n; ++row_idx) {
 			arma::Col<T> r(k);
 			for (idx_t col_idx = 0; col_idx < k; col_idx++) {
-				r(col_idx) = result->GetValue(col_idx, row_idx).GetValue<T>();
+				r(col_idx) = result->Collection().GetValue(col_idx, row_idx).GetValue<T>();
 			}
 			m.col(row++) = r;
 		}
@@ -69,9 +69,9 @@ void UnserializeObject(std::string json, T &t) {
 };
 
 template <typename T>
-T get_setting(ClientContext &context, std::string key) {
+T get_setting(ClientContext &context, const std::string &key) {
 	Value mlpack_value;
-	context.TryGetCurrentSetting(key, mlpack_value);
+	context.TryGetCurrentSetting(Identifier(key), mlpack_value);
 	return mlpack_value.GetValue<T>();
 }
 

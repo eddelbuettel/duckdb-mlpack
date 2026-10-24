@@ -47,7 +47,7 @@ static void RegisterMlpackTableFunction(ExtensionLoader &loader, string name, ve
 	desc.description = std::move(description);
 	desc.examples = {MlpackGenerateExample(name, desc.parameter_names)};
 	desc.categories = std::move(categories);
-	CreateTableFunctionInfo info(TableFunction(std::move(name), std::move(arg_types), function, bind));
+	CreateTableFunctionInfo info(TableFunction(Identifier(std::move(name)), std::move(arg_types), function, bind));
 	info.descriptions.push_back(std::move(desc));
 	loader.RegisterFunction(std::move(info));
 }

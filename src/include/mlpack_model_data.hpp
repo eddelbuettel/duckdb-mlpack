@@ -11,7 +11,7 @@ struct MlpackModelData : TableFunctionData {
 	std::string parameters {""};
 	std::string model {""};
 	vector<LogicalType> return_types;
-	vector<string> names;
+	vector<Identifier> names;
 };
 
 } // namespace duckdb

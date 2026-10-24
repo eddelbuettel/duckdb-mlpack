@@ -17,8 +17,8 @@ std::map<std::string, std::string> get_parameters(ClientContext &context, std::s
 
 	while (auto chunk = result->Fetch()) {
 		for (idx_t row_idx = 0; row_idx < n; row_idx++) {
-			std::string key = result->GetValue(0, row_idx).GetValue<std::string>();
-			std::string val = result->GetValue(1, row_idx).GetValue<std::string>();
+			std::string key = result->Collection().GetValue(0, row_idx).GetValue<std::string>();
+			std::string val = result->Collection().GetValue(1, row_idx).GetValue<std::string>();
 			params.try_emplace(key, val);
 		}
 	}
@@ -39,7 +39,7 @@ std::string retrieve_model(ClientContext &context, std::string model_table) {
 	assert(n == 1);
 	assert(k == 1);
 	result->Fetch();
-	std::string mod = result->GetValue(0, 0).GetValue<std::string>();
+	std::string mod = result->Collection().GetValue(0, 0).GetValue<std::string>();
 	return mod;
 }
 
@@ -69,7 +69,7 @@ std::string retrieve_vector(ClientContext &context, std::string model_table, std
 	if (n == 0)
 		return ("");
 	result->Fetch();
-	std::string vec = result->GetValue(0, 0).GetValue<std::string>();
+	std::string vec = result->Collection().GetValue(0, 0).GetValue<std::string>();
 	return vec;
 }
 

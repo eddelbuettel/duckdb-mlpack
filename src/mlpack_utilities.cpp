@@ -8,7 +8,7 @@
 namespace duckdb {
 
 unique_ptr<FunctionData> MlpackTrainTableBindInt(ClientContext &context, TableFunctionBindInput &input,
-                                                 vector<LogicalType> &return_types, vector<string> &names) {
+                                                 vector<LogicalType> &return_types, vector<Identifier> &names) {
 	auto resdata = make_uniq<MlpackModelData>();
 	resdata->features = input.inputs[0].GetValue<std::string>();
 	resdata->labels = input.inputs[1].GetValue<std::string>();
@@ -22,7 +22,8 @@ unique_ptr<FunctionData> MlpackTrainTableBindInt(ClientContext &context, TableFu
 }
 
 unique_ptr<FunctionData> MlpackUnsupervisedTrainTableBindInt(ClientContext &context, TableFunctionBindInput &input,
-                                                             vector<LogicalType> &return_types, vector<string> &names) {
+                                                             vector<LogicalType> &return_types,
+                                                             vector<Identifier> &names) {
 	auto resdata = make_uniq<MlpackModelData>();
 	resdata->features = input.inputs[0].GetValue<std::string>();
 	resdata->parameters = input.inputs[1].GetValue<std::string>();
@@ -35,7 +36,7 @@ unique_ptr<FunctionData> MlpackUnsupervisedTrainTableBindInt(ClientContext &cont
 }
 
 unique_ptr<FunctionData> MlpackPredictTableBindInt(ClientContext &context, TableFunctionBindInput &input,
-                                                   vector<LogicalType> &return_types, vector<string> &names) {
+                                                   vector<LogicalType> &return_types, vector<Identifier> &names) {
 	auto resdata = make_uniq<MlpackModelData>();
 	resdata->features = input.inputs[0].GetValue<std::string>();
 	resdata->model = input.inputs[1].GetValue<std::string>();
@@ -47,7 +48,7 @@ unique_ptr<FunctionData> MlpackPredictTableBindInt(ClientContext &context, Table
 }
 
 unique_ptr<FunctionData> MlpackTrainTableBindDouble(ClientContext &context, TableFunctionBindInput &input,
-                                                    vector<LogicalType> &return_types, vector<string> &names) {
+                                                    vector<LogicalType> &return_types, vector<Identifier> &names) {
 	auto resdata = make_uniq<MlpackModelData>();
 	resdata->features = input.inputs[0].GetValue<std::string>();
 	resdata->labels = input.inputs[1].GetValue<std::string>();
@@ -61,7 +62,7 @@ unique_ptr<FunctionData> MlpackTrainTableBindDouble(ClientContext &context, Tabl
 }
 
 unique_ptr<FunctionData> MlpackPredictTableBindDouble(ClientContext &context, TableFunctionBindInput &input,
-                                                      vector<LogicalType> &return_types, vector<string> &names) {
+                                                      vector<LogicalType> &return_types, vector<Identifier> &names) {
 	auto resdata = make_uniq<MlpackModelData>();
 	resdata->features = input.inputs[0].GetValue<std::string>();
 	resdata->model = input.inputs[1].GetValue<std::string>();
@@ -76,13 +77,13 @@ void MlpackMlpackVersion(DataChunk &args, ExpressionState &state, Vector &result
 	// there are no argument-less UDFs, or at least I found no easy way to register one
 	// so we fake a one-element argument vector and the Excecute() make one call where
 	// our constant payload is returned
-	Vector ignored_vector(LogicalType::VARCHAR, false, false, 1);
+	Vector ignored_vector(LogicalType::VARCHAR, 1, VectorDataInitialization::UNINITIALIZED);
 	UnaryExecutor::Execute<string_t, string_t>(ignored_vector, result, 1, [&](string_t unused) {
 		return StringVector::AddString(result, mlpack::util::GetVersion());
 	});
 }
 void MlpackArmadilloVersion(DataChunk &args, ExpressionState &state, Vector &result) {
-	Vector ignored_vector(LogicalType::VARCHAR, false, false, 1);
+	Vector ignored_vector(LogicalType::VARCHAR, 1, VectorDataInitialization::UNINITIALIZED);
 	UnaryExecutor::Execute<string_t, string_t>(ignored_vector, result, 1, [&](string_t unused) {
 		return StringVector::AddString(result, arma_version::as_string());
 	});
