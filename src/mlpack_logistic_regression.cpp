@@ -11,7 +11,7 @@ void MlpackLogisticRegressionTrainTableFunction(ClientContext &context, TableFun
 
 	// if we have been called, return nothing
 	if (resdata.data_returned) {
-		output.SetCardinality(0);
+		output.SetChildCardinality(0);
 		return;
 	}
 
@@ -55,7 +55,7 @@ void MlpackLogisticRegressionTrainTableFunction(ClientContext &context, TableFun
 		std::cout << "Misclassified: " << countError << std::endl;
 
 	auto n = labelsvec.n_elem;
-	output.SetCardinality(n);
+	output.SetChildCardinality(n);
 	for (idx_t i = 0; i < n; i++) {
 		output.data[0].SetValue(i, (int32_t)predictions[i]);
 	}
@@ -71,7 +71,7 @@ void MlpackLogisticRegressionPredictTableFunction(ClientContext &context, TableF
 
 	// if we have been called, return nothing
 	if (resdata.data_returned) {
-		output.SetCardinality(0);
+		output.SetChildCardinality(0);
 		return;
 	}
 
@@ -96,7 +96,7 @@ void MlpackLogisticRegressionPredictTableFunction(ClientContext &context, TableF
 	}
 
 	auto n = predictions.n_elem;
-	output.SetCardinality(n);
+	output.SetChildCardinality(n);
 	for (idx_t i = 0; i < n; i++) {
 		output.data[0].SetValue(i, (int32_t)predictions[i]);
 	}

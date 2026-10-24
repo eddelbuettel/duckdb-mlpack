@@ -15,7 +15,7 @@ void MlpackAdaboostTrainTableFunction(ClientContext &context, TableFunctionInput
 
 	// if we have been called, return nothing
 	if (resdata.data_returned) {
-		output.SetCardinality(0);
+		output.SetChildCardinality(0);
 		if (verbose)
 			std::cout << "  done\n";
 		return;
@@ -58,7 +58,7 @@ void MlpackAdaboostTrainTableFunction(ClientContext &context, TableFunctionInput
 		std::cout << "Misclassified: " << countError << std::endl;
 
 	auto n = predictedLabels.n_elem;
-	output.SetCardinality(n);
+	output.SetChildCardinality(n);
 	for (idx_t i = 0; i < n; i++) {
 		output.data[0].SetValue(i, (int)predictedLabels[i]);
 	}
@@ -73,7 +73,7 @@ void MlpackAdaboostPredictTableFunction(ClientContext &context, TableFunctionInp
 
 	// if we have been called, return nothing
 	if (resdata.data_returned) {
-		output.SetCardinality(0);
+		output.SetChildCardinality(0);
 		if (verbose)
 			std::cout << "  done\n";
 		return;
@@ -98,7 +98,7 @@ void MlpackAdaboostPredictTableFunction(ClientContext &context, TableFunctionInp
 	if (verbose)
 		classifiedvalues.print("predicted");
 
-	output.SetCardinality(n);
+	output.SetChildCardinality(n);
 	for (idx_t i = 0; i < n; i++) {
 		output.data[0].SetValue(i, (int32_t)classifiedvalues[i]);
 	}

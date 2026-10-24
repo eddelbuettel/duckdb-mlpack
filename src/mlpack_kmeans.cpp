@@ -15,7 +15,7 @@ void MlpackKmeansTrainTableFunction(ClientContext &context, TableFunctionInput &
 
 	// if we have been called, return nothing
 	if (resdata.data_returned) {
-		output.SetCardinality(0);
+		output.SetChildCardinality(0);
 		if (verbose)
 			std::cout << "  done\n";
 		return;
@@ -48,7 +48,7 @@ void MlpackKmeansTrainTableFunction(ClientContext &context, TableFunctionInput &
 		centroids.print("centroids");
 	}
 	auto n = assignments.n_elem;
-	output.SetCardinality(n);
+	output.SetChildCardinality(n);
 	for (idx_t i = 0; i < n; i++) {
 		output.data[0].SetValue(i, (int)assignments[i]);
 	}

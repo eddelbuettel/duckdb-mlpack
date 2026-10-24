@@ -45,7 +45,7 @@ void MlpackRandomForestTrainTableFunction(ClientContext &context, TableFunctionI
 
 	// if we have been called, return nothing
 	if (resdata.data_returned) {
-		output.SetCardinality(0);
+		output.SetChildCardinality(0);
 		if (verbose)
 			std::cout << "  done\n";
 		return;
@@ -104,7 +104,7 @@ void MlpackRandomForestTrainTableFunction(ClientContext &context, TableFunctionI
 		std::cout << "Misclassified: " << countError << std::endl;
 
 	auto n = predictedLabels.n_elem;
-	output.SetCardinality(n);
+	output.SetChildCardinality(n);
 	for (idx_t i = 0; i < n; i++) {
 		output.data[0].SetValue(i, (int)predictedLabels[i]);
 	}
@@ -125,7 +125,7 @@ void MlpackRandomForestPredictTableFunction(ClientContext &context, TableFunctio
 
 	// if we have been called, return nothing
 	if (resdata.data_returned) {
-		output.SetCardinality(0);
+		output.SetChildCardinality(0);
 		if (verbose)
 			std::cout << "  done\n";
 		return;
@@ -149,7 +149,7 @@ void MlpackRandomForestPredictTableFunction(ClientContext &context, TableFunctio
 	if (verbose)
 		classifiedvalues.print("predicted");
 
-	output.SetCardinality(n);
+	output.SetChildCardinality(n);
 	for (idx_t i = 0; i < n; i++) {
 		output.data[0].SetValue(i, (int32_t)classifiedvalues[i]);
 	}

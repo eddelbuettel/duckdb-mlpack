@@ -12,7 +12,7 @@ void MlpackBayesianLinearRegressionTrainTableFunction(ClientContext &context, Ta
 
 	// if we have been called before, return nothing
 	if (resdata.data_returned) {
-		output.SetCardinality(0);
+		output.SetChildCardinality(0);
 		if (verbose)
 			std::cout << "  done\n";
 		return;
@@ -53,7 +53,7 @@ void MlpackBayesianLinearRegressionTrainTableFunction(ClientContext &context, Ta
 	if (!silent)
 		std::cout << "RMSE: " << rmse << std::endl;
 
-	output.SetCardinality(n);
+	output.SetChildCardinality(n);
 	for (idx_t i = 0; i < n; i++) {
 		output.data[0].SetValue(i, fittedvalues[i]);
 	}
@@ -68,7 +68,7 @@ void MlpackBayesianLinearRegressionPredictTableFunction(ClientContext &context, 
 
 	// if we have been called, return nothing
 	if (resdata.data_returned) {
-		output.SetCardinality(0);
+		output.SetChildCardinality(0);
 		if (verbose)
 			std::cout << "  done\n";
 		return;
@@ -92,7 +92,7 @@ void MlpackBayesianLinearRegressionPredictTableFunction(ClientContext &context, 
 	if (verbose)
 		fittedvalues.print("fitted");
 
-	output.SetCardinality(n);
+	output.SetChildCardinality(n);
 	for (idx_t i = 0; i < n; i++) {
 		output.data[0].SetValue(i, fittedvalues[i]);
 	}
