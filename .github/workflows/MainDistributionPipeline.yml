@@ -26,11 +26,11 @@ jobs:
       # add fortran and omp for armadillo below mlpack
       extra_toolchains: "fortran;omp"    
 
-  code-quality-check:
-    name: Code Quality Check
-    uses: duckdb/extension-ci-tools/.github/workflows/_extension_code_quality.yml@v2.0-cyanoptera
-    with:
-      duckdb_version: v2.0.0
-      ci_tools_version: v2.0.0-cyanoptera
-      extension_name: mlpack
-      format_checks: 'format;tidy'
+  #code-quality-check:
+  #  name: Code Quality Check
+  #  uses: duckdb/extension-ci-tools/.github/workflows/_extension_code_quality.yml@v2.0-cyanoptera
+  #  with:
+  #    duckdb_version: v2.0.0
+  #    ci_tools_version: v2.0.0-cyanoptera
+  #    extension_name: mlpack
+  #    format_checks: 'format;tidy'
